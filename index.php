@@ -9,21 +9,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="target-densitydpi=device-dpi,width=640,width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>嗨！冒险 之 逃离深山 大冒险 现在起动啦！ 快来嗨一把吧！</title>
+    <title>嗨！冒险 之 成语挑战！</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet">
+	<!-- zihi style sheet-->
     <link href="css/app.css" rel="stylesheet">
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <!--<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>-->
-        <!--<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
-    <![endif]-->
-	<img src="src/img/head.jpg" style="position:absolute;width: 0;height: 0;">
+	<link href="css/wx20.css" rel="stylesheet">
+	<!-- template engine	-->
     <script src="js/juicer-min.js"></script>
-<!--    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>-->
+	<!-- <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>-->
 
+	<img src="src/img/head.jpg" style="position:absolute;width: 0;height: 0;">
     <!--模板-->
     <script id="pageTpl" type="text/template">
         <div class="row page page${id} full zh-hidden zh-read-yellow" data-page="${id}">
@@ -93,7 +90,7 @@
 		</div>
 	</div>
 <!--	splash页面-->
-	<div class="row page pagesplash full zh-hidden">
+	<div class="row page pagesplash full">
 		<div class="col-xs-12 v-center ">
 			<img class="splash-logo" src="src/img/splash/bg2.png" />
 		</div>
@@ -155,7 +152,7 @@
 </div>
 
 <!--遮罩层-->
-<div class="zh-overlay-mask" style=" overflow:  hidden;">
+<div class="zh-overlay-mask zh-hidden" style=" overflow:  hidden;">
 	<div id="zh-modal-wrap">
 		<div id="zh-modal" class="zh-modal zh-item-modal">
 			<div class="zh-modal-top">
@@ -186,7 +183,6 @@
 	</div>
 </div>
 
-<!--<script src="js/vue/vue.js"></script>-->
 <script src="js/jquery-2.1.4.min.js"></script>
 <!--配置页面-->
 <script src="js/config.js"></script>
@@ -197,151 +193,7 @@
 <!--<script src="js/hammer/hammer.js"></script>-->
 
 <script>
-	var lastUser = null;
-	var lastDes = null;
-	var lastImg = null;
-	var cUser = null;
-	var cScore = null;
-	//配置页面在config.js
-	//加载页面
-	<?php
-		$name = isset($_GET["name"])?htmlspecialchars(trim($_GET["name"])):null;
-		$des = isset($_GET["des"])?htmlspecialchars(trim($_GET["des"])):null;
-		$img = isset($_GET["img"])?htmlspecialchars(trim($_GET["img"])):null;
-		if($name && $des && $img){
-			echo "lastUser ='".$name."';"."\n";
-			echo "lastDes ='".$des."';"."\n";
-			echo "lastImg ='".$img."';"."\n";
-		}
-	?>
 
-    $(document).ready(function(){
-	    var myconfig = function(opt){
-		    opt = opt ? opt : {};
-		    var me = {};
-		    if (opt.debug !== true) {
-			    me.shareLink = 'http://wx.wordhi.com';
-			    me.shareImgUrl = 'http://wx.wordhi.com/src/img/badge/';
-			    me.shareImg = 'http://wx.wordhi.com/src/img/badge/stamp_3.png';
-		    }else{
-			    me.shareLink = 'http://dev.muyuruhai.com';
-			    me.shareImgUrl = 'http://dev.muyuruhai.com/src/img/badge/';
-			    me.shareImg = 'http://dev.muyuruhai.com/img/badge/stamp_3.png';
-		    }
-		    return me;
-	    };
-
-
-
-	    return;
-//	    wx.config({
-//		    debug: true,
-//		    appId: '<?php //echo $signPackage["appId"];?>//',
-//		    timestamp: <?php //echo $signPackage["timestamp"];?>//,
-//		    nonceStr: '<?php //echo $signPackage["nonceStr"];?>//',
-//		    signature: '<?php //echo $signPackage["signature"];?>//',
-//		    jsApiList: [
-//			    'onMenuShareTimeline',
-//			    'onMenuShareAppMessage',
-//			    'onMenuShareQQ',
-//			    'onMenuShareWeibo'
-//		    ]
-//	    });
-
-	    wx.ready(function() {
-		    var thisLink = myconfig({debug:true});
-		    console.log(thisLink);
-		    var shareTitle = "嗨！冒险 之 逃离深山 大冒险 现在起动啦！ 快来嗨一把吧！";
-		    var shareDesc = '你要逃离深山，看你啦';
-		    var shareLink = thisLink.shareLink;
-		    var shareImgUrl =thisLink.shareImgUrl;
-		    var shareImg = thisLink.shareImg;
-            wx.checkJsApi({
-                jsApiList: ['chooseImage'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-                success: function(res) {
-                    // 以键值对的形式返回，可用的api值true，不可用为false
-                    // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
-                }
-            });
-
-		    // 分享给朋友事件绑定
-		    wx.onMenuShareAppMessage({
-			    title: shareTitle,
-			    desc: shareLink,
-			    link: shareLink,
-			    imgUrl: shareImg,
-			    success:function(res){
-			    },
-			    trigger:function(){
-				    if (zhGameLogic.userDes() !== ''){
-					    this.title = '冒险者: '+zhGameLogic.userName();
-					    this.imgUrl = shareImgUrl + zhGameLogic.userBadge();
-					    this.desc = zhGameLogic.userDes();
-					    this.link = shareLink+'?name='+zhGameLogic.userName()+'&des='+zhGameLogic.userDes()+'&img='+zhGameLogic.userBadge();
-				    }else{
-					    this.title = shareTitle;
-					    this.imgUrl = shareLink + '/src/img/head.jpg';
-					    this.desc = '字嗨之逃离深山';
-					    this.link = shareLink;
-				    }
-			    }
-		    });
-
-		    // 分享到朋友圈
-		    wx.onMenuShareTimeline({
-			    title: shareTitle,
-			    link: shareLink,
-			    imgUrl: shareImg,
-			    trigger:function(res){
-				    if (zhGameLogic.userDes()!== ''){
-					    this.title = '冒险者: '+zhGameLogic.userName()+' 在逃离深山冒险获得\n“'+zhGameLogic.userDes()+'”称号';
-					    this.imgUrl = shareImgUrl + zhGameLogic.userBadge();
-					    this.link = shareLink+'?name='+zhGameLogic.userName()+'&des='+zhGameLogic.userDes()+'&img='+zhGameLogic.userBadge();
-				    }else{
-					    this.title = shareTitle;
-					    this.imgUrl = shareLink + '/src/img/head.jpg';
-					    this.link = shareLink;
-				    }
-			    }
-		    });
-
-		    // 分享到QQ
-		    wx.onMenuShareQQ({
-			    title: shareTitle,
-			    desc: shareDesc,
-			    link: shareLink,
-			    imgUrl: shareImg
-		    });
-
-		    // 分享到微博
-		    wx.onMenuShareWeibo({
-			    title: shareTitle,
-			    desc: shareDesc,
-			    link: shareLink,
-			    imgUrl: shareImg
-		    });
-	    });
-    });
-
-	window.onload = function(){
-		zhLoadStory.setConfig(zhConfig);
-		zhLoadStory.setLogicModal(zhGameLogic);
-		zhLoadStory.init();
-		zhGameLogic.showLastUserResult(lastUser,lastDes,lastImg);
-		$(".zh-restartbtn").click(function(e){
-			zhGameLogic.restart();
-		});
-		$(".zh-btnwant").click(function(e){
-			zhGameLogic.restart();
-		});
-		var $zhname = $('#zh-name');
-		$zhname.focus(function(e){
-			$(this).toggleClass("zh-name-active");
-		});
-		$zhname.blur(function(e){
-			$(this).toggleClass("zh-name-active");
-		})
-	};
 </script>
 </body>
 </html>
