@@ -80,20 +80,11 @@ html,body {
     border-radius: 0;
     color: #FFCC00;
 }
-/*.zh-btn:active:hover:focus{*/
-/*outline: none !important;*/
-/*background-color: rgba(253,234,147,0.8) !important;*/
-/*}*/
 .zh-btn:active{
     outline: none !important;
     background-color: rgba(253,234,147,1) !important;
     border-color: #FFCC00 !important;
 }
-/*.zh-btn:hover{*/
-/*outline: none !important;*/
-/*background-color: rgba(253,234,147,1);*/
-/*border-color: #FFCC00 !important;*/
-/*}*/
 .zh-btn:hover:focus{
     outline: none !important;
     background-color: rgba(253,234,147,1);

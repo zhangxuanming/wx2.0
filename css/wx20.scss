@@ -1,4 +1,242 @@
+$zhYellow:#ffcc00;
+$zhBlack:#444;
+$zhBlackTran:rgba(0,0,0,0.7);
+$zhGreen: green;
+
+@mixin btnSetting(){
+  color:$zhBlack !important;
+  border-color: $zhYellow !important;
+//  background-color: $ !important;
+  background-color: rgba(253,234,147,1) !important;
+}
+
+@mixin btn($name:zh-btn,$bgColor:$zhBlackTran,$borderColor:$zhYellow) {
+  .#{$name} {
+    border-radius: 0;
+    outline: none !important;
+    border: 2px solid $zhYellow;
+    background-color: $bgColor;
+    color: $zhYellow;
+  }
+  .#{$name}:active {
+    @include btnSetting();
+  }
+  .#{$name}:hover:focus{
+    //outline: none !important;
+    //  background-color: rgba(253,234,147,1);
+    //@include btnSetting;
+  }
+}
+//透明色的黑背景
+@mixin bgBlack($o:1){
+  background-color: rgba(0,0,0,$o);
+}
+//垂直居中
+@mixin vCenter($t:50%,$p:-50%){
+  position: absolute;
+  top: $t;
+  transform: translateY($p);
+  -webkit-transform: translateY($p);
+  -moz-transform: translateY($p);
+}
+@mixin margin($n,$m){
+  .#{$n}{
+    margin-top: $m;
+  }
+}
+
+//全局设定
 body,html {
   height: 100%;
   font-family: "Microsoft Yahei","Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: $zhBlack;
 }
+.container{
+  max-width: 600px;
+}
+
+.zh-hidden{
+  display: none;
+}
+
+.v-center{
+  @include vCenter();
+}
+
+.full{
+  position:relative;
+  height: 100%;
+  min-height: 100%;
+}
+.zh-yellow{
+  background-color: $zhYellow;
+}
+
+@include margin(top1,1em);
+@include btn();
+@include btn(zh-btn-yellow);
+
+//页面设定
+.pagesplash{
+  background-color: #ffe680;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("/src/img/splash/bg1.png");
+}
+
+.pagesplash *{
+  display: block;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+}
+
+.splash-logo{
+  width: 100%;
+}
+
+/*蒙版层*/
+.zh-overlay-mask{
+  background-color: rgba(0,0,0,0.7);
+  z-index: 999;
+  position: absolute;
+  top:0;left: 0;
+  width: 100%;height: 100%;
+}
+#zh-modal-wrap{
+  position: relative;
+  top: 15%;
+  perspective: 600px;
+}
+.zh-modal{
+  position: relative;
+  background-color: $zhYellow;
+  max-width: 80%;
+  min-height: 25%;
+  margin: 0 auto;
+  padding: 1em;
+  box-shadow: 1px 1px 12px 2px #333,inset 0 0 5px #000000;;
+  -webkit-box-shadow: 1px 1px 12px 2px #333,inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+  animation: m-popup 0.5s ease;
+  -webkit-animation: m-popup 0.5s ease;
+  border:10px solid $zhYellow;
+}
+#zh-modal::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;height: 100%;
+  background-color: transparent;
+  z-index: -1;
+  animation: m-popup1 3s infinite linear;
+  -webkit-animation: m-popup1 3s infinite linear;
+  box-shadow: 1px 2px 2px 2px #000000;
+}
+#zh-modal::after{
+  content: "";
+  position: absolute;
+  top:0;left: 0;
+  width: 100%;height: 100%;
+  background-color: #FFCC00;
+  transform: rotate(10deg);
+  -webkit-transform: rotate(10deg);
+  border:10px solid #FFCC00;
+  z-index: -1;
+}
+.zh-m-name{
+  font-size: 2.5em;
+  color:tomato;
+  text-shadow:  1px 1px 0 rgba(0,0,0,0.5);
+  -webkit-text-shadow:1px 1px 0 rgba(0,0,0,0.5);
+}
+.zh-m-des{
+  font-size: 1.2em;
+  color: #333;
+}
+.zh-m-img{
+  /*background-color: red;*/
+  display: inline-block;
+  float: right;
+  height: 45px;
+  width: 45px;
+}
+.zh-modal-noty{
+  position: relative;
+  /*background-color: rgba(0,0,0,0.5);*/
+  max-width: 80%;
+  min-width: 80%;
+  min-height: 100px;
+  margin: 0 auto;
+  color: darkorange;
+  padding: 1em;
+  animation: shownoty 0.6s ease-in-out;
+  -webkit-animation: shownoty 0.6s ease-in-out;
+  text-shadow: 1px 1px 0 black;
+  text-align: center;
+}
+.zh-noty-title{
+  font-size: 1.5em;
+  color: orange;
+}
+.zh-noty-content{
+  font-size: 1.2em;
+  color: #FFCC00 ;
+}
+.zh-noty-content span{
+  color:chartreuse;
+}
+.zh-modal-bottom{
+  /*margin-top: 1em;*/
+}
+@keyframes m-popup {
+  0%{transform: scale(0) rotate(0deg);
+  }
+  60%{transform: scale(1.5) rotate(0deg);}
+  100%{transform: scale(1);
+  }
+}
+@-webkit-keyframes m-popup {
+  0%{transform: scale(0) rotate(0deg);
+  }
+  60%{transform: scale(1.5) rotate(0deg);}
+  100%{transform: scale(1);
+  }
+}
+@keyframes m-popup1 {
+  0%{box-shadow: 1px 1px 200px 1px #FF9500;}
+  50%{box-shadow: none; }
+  100%{box-shadow: 1px 1px 200px 1px #FF9500;}
+}
+@-webkit-keyframes m-popup1 {
+  0%{box-shadow: 1px 1px 200px 1px #FF9500;}
+  50%{box-shadow: none; }
+  100%{box-shadow: 1px 1px 200px 1px #FF9500;}
+}
+@keyframes shownoty {
+  0% {opacity: 0;
+    -webkit-transform: translateY(200px);
+    -moz-transform: translateY(200px);
+    transform: translateY(200px);
+  }
+  100% {opacity: 1;
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+@-webkit-keyframes shownoty {
+  0% {opacity: 0;
+    -webkit-transform: translateY(200px);
+    -moz-transform: translateY(200px);
+    transform: translateY(200px);
+  }
+  100% {opacity: 1;
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+//游戏界面
+@import "gamepage";

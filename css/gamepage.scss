@@ -1,0 +1,44 @@
+
+.g-top{
+  background-color: $zhGreen;
+  height: 15%;
+}
+
+.g-middle{
+  background-color: #ffff00;
+  height: 65%;
+}
+
+.g-bottom {
+  background-color: #1b6d85;
+  height: 20%;
+}
+
+.g-info{
+
+}
+.g-area{
+  position: absolute;
+  background-color: #555;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+//  text-align: center;
+}
+  .g-wrap{
+    position: relative;
+    margin: 0 auto;
+    background-color: orangered;
+  }
+  .g-block{
+//    display: inline-block;
+    position: absolute;
+    outline: none;
+    background-color: $zhYellow;
+    border: 0 solid #ffff00;
+    padding: 0;
+//    margin: 2px;
+    &:active{
+      background-color: red;
+    }
+  }
