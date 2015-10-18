@@ -79,7 +79,18 @@
     <div class="row wrap full zh-yellow">
 <!--	    头部信息-->
 	    <div class="col-sm-12 g-top">
-
+		    <div class="col-sm-12 center-block" style="padding:0.3em;text-align: center;font-size: 1.2em;color: azure">视觉系颜值高</div>
+		    <div class="g-top-container">
+			    <div class="row">
+				    <div class="col-xs-5 g-score">XXX分</div>
+				    <div class="col-xs-5 g-timeleft">xxx毫秒</div>
+			    </div>
+			    <div class="row">
+				    <div class="col-xs-10 g-timebar">
+					    <span class="g-barinner"></span>
+				    </div>
+			    </div>
+		    </div>
 	    </div>
 <!--	    游戏区-->
 	    <div class="col-sm-12 g-middle">
@@ -137,6 +148,7 @@
 
 <!--配置页面-->
 <script src="js/zh-gameLayout.js"></script>
+<script src="js/zh-gameTimer.js"></script>
 <!--<script src="js/config.js"></script>-->
 <!--<script src="js/zh-game.js"></script>-->
 <!--<script src="js/zh-story.js"></script>-->
@@ -144,8 +156,50 @@
 
 <script>
 
+	//		tim(0);
 	$(document).ready(function(){
-		gameModule.init();
+
+		gameModule.init({
+			col:6,
+			row:5,
+			margin:1
+		});
+		$g = $(".g-timeleft");
+		$bar = $('.g-barinner');
+		$m = $('.zh-overlay-mask');
+		function getBarLegnth(){
+			return 100*(1 -  tt.getRunningSecond() / tt.getMaxtime());
+		}
+
+		var tt = gameTimer;
+		tt.setMaxtime(5);
+		tt.setDelay(1000/24);
+		tt.updateCallback(function(n){
+			var bl = getBarLegnth();
+			$bar.css({"width":bl+"%"});
+			$g.html(tt.getRunningSecond());
+		});
+		tt.endCallback(function(n){
+			console.log("end la");
+		});
+		var an = true;
+		//倒计时
+		var tcd = new tt.cd(1000);
+		$(".g-block").click(function(){
+			if(an){
+				tcd.stepFunc(function(n){
+					$g.html("预备开始:"+(4-n));
+					$m.fadeIn(400).delay(200).fadeOut(200);
+				});
+				tcd.start(function(n){
+					tt.loopRestart();
+				},3);
+			}else{
+				tt.loopStop();
+			}
+			an = !an;
+		});
+
 	});
 </script>
 </body>

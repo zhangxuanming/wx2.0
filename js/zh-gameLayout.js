@@ -4,12 +4,8 @@
 
 var gameModule = (function(my){
 
-    my.init = function(){
-        this.Layout.update();
-    };
-    //刷新布局
-    my.updateLayout = function(layoutConfig){
-        this.Layout.update(layoutConfig);
+    my.init = function(layoutConfig){
+        this.Layout.init(layoutConfig);
     };
     return my;
 }(gameModule || {}));
@@ -43,7 +39,7 @@ gameModule.Layout = (function(my){
 
     //计算每个按键大小返回size Object
     var getSizes = function(){
-        var _wrapSize = getWrapSize();
+        var _wrapSize =  getWrapSize();
         var _w = 0
             ,_h = 0;
         _w = Math.floor((_wrapSize.width / _layoutConfig.col) - _layoutConfig.margin);
@@ -57,7 +53,7 @@ gameModule.Layout = (function(my){
     };
 
     //根据size 计算布局确定坐标
-    var getBlockPostion = function(sizeObj){
+    var getBoxPostion = function(sizeObj){
         var _blockSize = sizeObj
             ,_blockQty = _layoutConfig.col * _layoutConfig.row;
         var _poObj = [];
@@ -85,10 +81,13 @@ gameModule.Layout = (function(my){
         return _poObj;
     };
 
+    var initBoxObj = function(){
+
+    };
     //根据坐标渲染布局，这里需要接入以后的文字逻辑
     var randerLayout = function(){
         var sizeObj = getSizes();
-        var positions = getBlockPostion(sizeObj);
+        var positions = getBoxPostion(sizeObj);
         var gb = "";
         $.each(positions,function(i,v){
             gb += '<button data-index="'+i+'" class="g-block" style="width:'+sizeObj.blockWidth+'px;height:'+sizeObj.blockHeight+'px;top:'+v.y+'px;left:'+ v.x+'px">'+i+'</button>';
@@ -105,5 +104,14 @@ gameModule.Layout = (function(my){
         setlayoutConfig(layoutConfig);
         randerLayout();
     };
+    my.init = function(layoutConfig){
+        my.update(layoutConfig);
+    };
     return my;
 }(gameModule.Layout || {}));
+
+gameModule.Logic = (function(my){
+
+    return my;
+}(gameModule.Logic || {}));
+console.log(gameModule);

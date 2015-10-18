@@ -250,4 +250,25 @@ body, html {
   .g-block:active {
     background-color: red; }
 
+.g-top .g-top-container {
+  position: relative; }
+  .g-top .g-top-container .g-score, .g-top .g-top-container .g-timeleft {
+    font-size: 1.3em;
+    font-weight: bolder;
+    color: #ffcc00; }
+.g-top .g-timebar {
+  position: relative;
+  height: 10px;
+  background-color: #ffcc00; }
+  .g-top .g-timebar .g-barinner {
+    display: block;
+    position: absolute;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to left, yellow, red);
+    transition: width 0.05s;
+    -webkit-transition: width 0.05s;
+    z-index: 1; }
+
 /*# sourceMappingURL=wx20.css.map */
