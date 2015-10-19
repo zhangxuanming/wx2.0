@@ -245,6 +245,7 @@ body, html {
   position: absolute;
   outline: none;
   background-color: #ffcc00;
+  font-size: 1.5em;
   border: 0 solid #ffff00;
   padding: 0; }
   .g-block:active {

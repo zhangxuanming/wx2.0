@@ -19,6 +19,8 @@
 	<script src="js/jquery-2.1.4.min.js"></script>
 	<script src="js/greensock-js/src/minified/TweenMax.min.js"></script>
 	<script src="js/underscore-min.js"></script>
+	<script src="js/underscore.string.js"></script>
+	<script>_.mixin(s.exports());</script>
     <script src="js/juicer-min.js"></script>
 	<!-- template engine	-->
 	<script src="css/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
@@ -149,6 +151,7 @@
 <!--配置页面-->
 <script src="js/zh-gameLayout.js"></script>
 <script src="js/zh-gameTimer.js"></script>
+<script src="js/zh-gameLogic.js"></script>
 <!--<script src="js/config.js"></script>-->
 <!--<script src="js/zh-game.js"></script>-->
 <!--<script src="js/zh-story.js"></script>-->
@@ -158,11 +161,10 @@
 
 	//		tim(0);
 	$(document).ready(function(){
-
 		gameModule.init({
 			col:6,
 			row:5,
-			margin:1
+			margin:2
 		});
 		$g = $(".g-timeleft");
 		$bar = $('.g-barinner');
@@ -172,7 +174,7 @@
 		}
 
 		var tt = gameTimer;
-		tt.setMaxtime(5);
+		tt.setMaxtime(10);
 		tt.setDelay(1000/24);
 		tt.updateCallback(function(n){
 			var bl = getBarLegnth();
@@ -182,8 +184,9 @@
 		tt.endCallback(function(n){
 			console.log("end la");
 		});
-		var an = true;
+
 		//倒计时
+		var an = true;
 		var tcd = new tt.cd(1000);
 		$(".g-block").click(function(){
 			if(an){
@@ -193,13 +196,14 @@
 				});
 				tcd.start(function(n){
 					tt.loopRestart();
-				},3);
+				},-1);
 			}else{
 				tt.loopStop();
 			}
 			an = !an;
 		});
 
+		gameModule.Data.tr();
 	});
 </script>
 </body>

@@ -19,6 +19,9 @@ gameModule.Layout = (function(my){
         row : 5,
         margin :3
     };
+    my.getConfig = function(){
+        return _layoutConfig;
+    };
     var setlayoutConfig  = function(lc){
         _layoutConfig = lc || _layoutConfig;
     };
@@ -90,16 +93,13 @@ gameModule.Layout = (function(my){
         var positions = getBoxPostion(sizeObj);
         var gb = "";
         $.each(positions,function(i,v){
-            gb += '<button data-index="'+i+'" class="g-block" style="width:'+sizeObj.blockWidth+'px;height:'+sizeObj.blockHeight+'px;top:'+v.y+'px;left:'+ v.x+'px">'+i+'</button>';
+            gb += '<button data-btnid="'+i+'" class="g-block" style="width:'+sizeObj.blockWidth+'px;height:'+sizeObj.blockHeight+'px;top:'+v.y+'px;left:'+ v.x+'px">'+i+'</button>';
         });
         setWrapSize(sizeObj.wrapWidth,sizeObj.wrapHeight);
 
         $gWrap.empty().append(gb);
     };
 
-    //my.refreshLayout = function(){
-    //    randerLayout();
-    //};
     my.update = function(layoutConfig){
         setlayoutConfig(layoutConfig);
         randerLayout();
@@ -110,8 +110,3 @@ gameModule.Layout = (function(my){
     return my;
 }(gameModule.Layout || {}));
 
-gameModule.Logic = (function(my){
-
-    return my;
-}(gameModule.Logic || {}));
-console.log(gameModule);

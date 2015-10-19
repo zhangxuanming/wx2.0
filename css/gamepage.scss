@@ -31,13 +31,12 @@
     background-color: orangered;
   }
   .g-block{
-//    display: inline-block;
     position: absolute;
     outline: none;
     background-color: $zhYellow;
+    font-size: 1.5em;
     border: 0 solid #ffff00;
     padding: 0;
-//    margin: 2px;
     &:active{
       background-color: red;
     }
