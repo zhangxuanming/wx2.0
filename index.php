@@ -106,7 +106,9 @@
 		    </div>
 	    </div>
 <!--	    底部操作区-->
-	    <div class="col-sm-12 g-bottom"></div>
+	    <div class="col-sm-12 g-bottom">
+		    <div id="btn-change" class="btn zh-yellow btn-block">太难了，换一个</div>
+	    </div>
     </div>
 
     <!--结局页-->
@@ -204,6 +206,10 @@
 		});
 
 		gameModule.Data.tr();
+		$("#btn-change").click(function(){
+			$(".g-block").css({"color":"black"});
+			gameModule.Data.tr();
+		})
 	});
 </script>
 </body>
