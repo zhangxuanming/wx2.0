@@ -263,7 +263,6 @@ gameModule.Logic = (function(){
     //绑定动作
     var _actionBinding = function(){
         action_boxClick();
-        console.log(_data);
     };
     my.updateData = function(){
         _setData();
