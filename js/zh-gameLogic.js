@@ -185,6 +185,7 @@ gameModule.Logic = (function(){
     };
     var _resetAll = function(){
         _resetArr();
+        _victorRef = [];
         _lastPos = [];
     };
     var _checkBox = function(boxObj){
