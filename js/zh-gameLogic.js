@@ -183,6 +183,10 @@ gameModule.Logic = (function(){
         _selectedIndex = [];
         _selectedObj = [];
     };
+    var _resetAll = function(){
+        _resetArr();
+        _lastPos = [];
+    };
     var _checkBox = function(boxObj){
         if(!boxObj){
             return false
@@ -232,6 +236,7 @@ gameModule.Logic = (function(){
                     ,boxObj = _data[bid]
                     ,isBox = false
                     ,isV = false;
+                console.log(boxObj);
                 if(_.indexOf(_victorRef,boxObj.ref)>=0){
                     return
                 }
@@ -247,7 +252,8 @@ gameModule.Logic = (function(){
                 if(isV){
                     alert("过了，鼓掌！！！");
                     //重玩
-                    gameModule.Layout.update();
+                    _resetAll();
+                    gameModule.Layout.init();
                 }
             }
         },_doms.box);
@@ -257,6 +263,9 @@ gameModule.Logic = (function(){
     var _actionBinding = function(){
         action_boxClick();
         console.log(_data);
+    };
+    my.updateData = function(){
+        _setData();
     };
     my.init = function(){
         _setData();

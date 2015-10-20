@@ -96,7 +96,6 @@ gameModule.Layout = (function(my){
             gb += '<button data-boxid="'+i+'" class="g-block zh-yellow" style="width:'+sizeObj.blockWidth+'px;height:'+sizeObj.blockHeight+'px;top:'+v.y+'px;left:'+ v.x+'px">'+i+'</button>';
         });
         setWrapSize(sizeObj.wrapWidth,sizeObj.wrapHeight);
-
         $gWrap.empty().append(gb);
     };
 
@@ -120,6 +119,7 @@ gameModule.Layout = (function(my){
         setlayoutConfig(layoutConfig);
         randerLayout();
         fillData();
+        gameModule.Logic.updateData();
     };
     my.updateData = function(){
         fillData();
