@@ -4,6 +4,7 @@ $zhRed:red;
 $zhBlackTran:rgba(0,0,0,0.7);
 $zhGreen: green;
 
+
 @mixin btnSetting(){
   color:$zhBlack !important;
   border-color: $zhYellow !important;
@@ -72,8 +73,14 @@ body,html {
 .zh-yellow{
   background-color: $zhYellow;
 }
+.zh-white{
+  background-color: azure;
+}
 .zh-redColor{
   color:$zhRed;
+}
+.zh-greenColor{
+  color:greenyellow;
 }
 
 @include margin(top1,1em);

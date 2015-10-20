@@ -8,6 +8,8 @@ gameModule.Data = (function(my){
 
     var _wordsCount = 3;
     var _restWordsCount = 10;
+    var _currentData = null;
+
     var _dicArray = function(str){
         return _.words(str);
     };
@@ -126,28 +128,140 @@ gameModule.Data = (function(my){
         }
         return dataObj;
     };
+    var _setData = function(){
+        _currentData = _calculateData(_prepareWords(_wordsCount,_restWordsCount));
+        return _currentData;
+    };
     my.setWordsPool = function(wordsPool){
         _zhDicPool = wordsPool
     };
-    my.getData = function(){
-        return _calculateData(_prepareWords(_wordsCount,_restWordsCount));
+    my.newData = function(){
+        return _setData();
+    };
+    my.getCurrentData = function(){
+        return _currentData;
     };
     return my;
 })(gameModule.Data || {});
 
 //游戏逻辑模块
-gameModule.Logic = (function(my){
-    var _words = "";
-    var _layoutModule = gameModule.Layout;
-    var _data = gameModule.Data;
+gameModule.Logic = (function(){
+    var my = {}
+        ,_data = null
+        ,_passCondition = 0
+        ,_doms = {
+            box:".g-block",
+            startBtn:".g-start"
+        }
+        ,_selectedCss = "g-blockSelected";
 
-    var loadWordsPool = function(){
-
+    //设定数据
+    var _setData = function(){
+        _data = gameModule.Data.getCurrentData();
     };
-    var getWords = function(){
 
+    //过关判定
+    var _checkVictor = function(){
+        if(_victorRef.length >= 3){
+            _victorRef = [];
+            return true;
+        }else{
+            return false;
+        }
     };
 
+    var _selectedPos = []
+        ,_selectedIndex = []
+        ,_selectedRef = []
+        ,_selectedObj = []
+        ,_victorRef = []
+        ,_lastPos = [];//保留本次check链用于清空css
+    var _resetArr = function(){
+        _lastPos = _selectedPos;
+        _selectedPos = [];
+        _selectedRef = [];
+        _selectedIndex = [];
+        _selectedObj = [];
+    };
+    var _checkBox = function(boxObj){
+        if(!boxObj){
+            return false
+        }
+        var lastPos;
+        var lastRef;
+        var lastIndex;
+        var lastObj;
+        if(_selectedPos.length === 0){
+            _selectedIndex.push(boxObj.index);
+            _selectedPos.push(boxObj.pos);
+            _selectedRef.push(boxObj.ref);
+            _selectedObj.push(boxObj);
+            return true;
+        }
+        lastObj = _.last(_selectedObj);
+        if(lastObj.index<0){
+            _resetArr();
+            return false;
+        }
+        if (boxObj.from >=0 && boxObj.pos == lastObj.to){
+            if(boxObj.index != _selectedObj.length){
+                _resetArr();
+                return false
+            }
+            _selectedIndex.push(boxObj.index);
+            _selectedPos.push(boxObj.pos);
+            _selectedRef.push(boxObj.ref);
+            _selectedObj.push(boxObj);
+            if(boxObj.pos == boxObj.to){
+                _victorRef.push(boxObj.ref);
+                _lastPos = [];
+                _resetArr();
+            }
+            return true;
+        }else{
+            _resetArr();
+            return false;
+        }
+    };
+    //box按钮处理
+    var action_boxClick = function(){
+        $(document).on({
+            click:function(e){
+                var $box = $(this)
+                    ,bid = $box.attr("data-boxid")
+                    ,boxObj = _data[bid]
+                    ,isBox = false
+                    ,isV = false;
+                if(_.indexOf(_victorRef,boxObj.ref)>=0){
+                    return
+                }
+                isBox = _checkBox(boxObj);
+                if(isBox){
+                    $box.addClass(_selectedCss);
+                }else{
+                    _.each(_lastPos,function(v,i){
+                       $('[data-boxid="'+v+'"]').removeClass(_selectedCss);
+                    });
+                }
+                isV = _checkVictor();
+                if(isV){
+                    alert("过了，鼓掌！！！");
+                    //重玩
+                    gameModule.Layout.update();
+                }
+            }
+        },_doms.box);
+    };
+
+    //绑定动作
+    var _actionBinding = function(){
+        action_boxClick();
+        console.log(_data);
+    };
+    my.init = function(){
+        _setData();
+        _actionBinding();
+    };
     return my;
-}(gameModule.Logic || {}));
+}());
 

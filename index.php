@@ -210,7 +210,8 @@
 
 		$("#btn-change").click(function(){
 			gameModule.Layout.updateData();
-		})
+		});
+
 	});
 </script>
 </body>

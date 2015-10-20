@@ -6,6 +6,7 @@ var gameModule = (function(my){
 
     my.init = function(layoutConfig){
         this.Layout.init(layoutConfig);
+        this.Logic.init();
     };
     return my;
 }(gameModule || {}));
@@ -92,15 +93,16 @@ gameModule.Layout = (function(my){
         var positions = getBoxPostion(sizeObj);
         var gb = "";
         $.each(positions,function(i,v){
-            gb += '<button data-boxid="'+i+'" class="g-block" style="width:'+sizeObj.blockWidth+'px;height:'+sizeObj.blockHeight+'px;top:'+v.y+'px;left:'+ v.x+'px">'+i+'</button>';
+            gb += '<button data-boxid="'+i+'" class="g-block zh-yellow" style="width:'+sizeObj.blockWidth+'px;height:'+sizeObj.blockHeight+'px;top:'+v.y+'px;left:'+ v.x+'px">'+i+'</button>';
         });
         setWrapSize(sizeObj.wrapWidth,sizeObj.wrapHeight);
 
         $gWrap.empty().append(gb);
     };
+
     //填充数据到box
     var fillData = function(){
-        var _data = gameModule.Data.getData();
+        var _data = gameModule.Data.newData();
         _.each(_data,function(v,i){
             var $box = $('[data-boxid="'+v.pos+'"]');
             $box.removeClass("zh-redColor");
@@ -114,6 +116,7 @@ gameModule.Layout = (function(my){
         }
     };
     my.update = function(layoutConfig){
+        layoutConfig = layoutConfig || _layoutConfig;
         setlayoutConfig(layoutConfig);
         randerLayout();
         fillData();
