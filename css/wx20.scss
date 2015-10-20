@@ -1,5 +1,6 @@
 $zhYellow:#ffcc00;
 $zhBlack:#444;
+$zhRed:red;
 $zhBlackTran:rgba(0,0,0,0.7);
 $zhGreen: green;
 
@@ -70,6 +71,9 @@ body,html {
 }
 .zh-yellow{
   background-color: $zhYellow;
+}
+.zh-redColor{
+  color:$zhRed;
 }
 
 @include margin(top1,1em);

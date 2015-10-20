@@ -8,14 +8,6 @@ gameModule.Data = (function(my){
 
     var _wordsCount = 3;
     var _restWordsCount = 10;
-    //var _layoutMatrix = gameModule.Layout.getConfig();
-    //var _matrix = {
-    //    col:_layoutMatrix.col,
-    //    row:_layoutMatrix.row,
-    //    totalBox: _layoutMatrix.col * _layoutMatrix.row
-    //};
-
-    //var _matrix = gameModule.Layout.getConfig();
     var _dicArray = function(str){
         return _.words(str);
     };
@@ -69,7 +61,6 @@ gameModule.Data = (function(my){
             totalBox: _layoutMatrix.col * _layoutMatrix.row
         };
         var dataObj = {}
-            //,sw = preparedWords.selectedWords
             ,cw = preparedWords.selectedArray
             ,rw = preparedWords.restChars
             ,totalBox = _matrix.totalBox
@@ -84,10 +75,11 @@ gameModule.Data = (function(my){
                 index:-1,
                 from:-1,
                 to:-1,
-                char: _.sample(rw,1)[0]
+                char: _.sample(rw,1)[0],
+                mark:-1
             };
         }
-
+        //计算空位
         for (var _i = 0; _i<preparedWords.selectedArray.length; _i++){
             var _pos = _.sample(_.difference(emptyBoxes,usedBoxes),1)[0];
             var _prebox = -1;
@@ -104,19 +96,22 @@ gameModule.Data = (function(my){
                     break;
                 }
                 if(_j == _l-1){
-                    _nextBox = -2;
+                    _nextBox = _pos;
+                }
+                if(_j == 0){
+                    _prebox = _pos;
                 }
                 _temp[_pos]={
                     index:_j,
                     pos:_pos,
                     char:cw[_i][_j],
                     from:_prebox,
-                    to:_nextBox
+                    to:_nextBox,
+                    mark:1
                 };
                 _prebox = _pos;
                 _pos = _nextBox;
             }
-
             //替换掉box的数据并替换reference
             if(_temp){
                 _.each(_temp,function(v,i){
@@ -125,28 +120,20 @@ gameModule.Data = (function(my){
                     dataObj[v.pos].char = v.char;
                     dataObj[v.pos].from = v.from;
                     dataObj[v.pos].to = v.to;
+                    dataObj[v.pos].mark = v.mark;
                 });
             }
         }
-        _.each(dataObj,function(v,i){
-            $('[data-btnid="'+v.pos+'"]').html(v.char);
-            if (v.ref>=0){
-                $('[data-btnid="'+v.pos+'"]').css({"color":"red"});
-            }
-        });
-        console.log(dataObj);
         return dataObj;
     };
-
-    my.tr = function(){
-        _calculateData(_prepareWords(_wordsCount,_restWordsCount));
+    my.setWordsPool = function(wordsPool){
+        _zhDicPool = wordsPool
     };
-
     my.getData = function(){
         return _calculateData(_prepareWords(_wordsCount,_restWordsCount));
     };
     return my;
-}(gameModule.Data || {}));
+})(gameModule.Data || {});
 
 //游戏逻辑模块
 gameModule.Logic = (function(my){
@@ -164,10 +151,3 @@ gameModule.Logic = (function(my){
     return my;
 }(gameModule.Logic || {}));
 
-//var words = _.words(zhDicPool);
-//var warr = _.sample(words,3);
-//var restWarr = _.difference(words,warr);
-//console.log(warr);
-//_.each(warr,function(v,i){
-//    console.log(_.chars(v));
-//});

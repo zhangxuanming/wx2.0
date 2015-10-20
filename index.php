@@ -166,7 +166,8 @@
 		gameModule.init({
 			col:6,
 			row:5,
-			margin:2
+			margin:2,
+			debug:true
 		});
 		$g = $(".g-timeleft");
 		$bar = $('.g-barinner');
@@ -191,24 +192,24 @@
 		var an = true;
 		var tcd = new tt.cd(1000);
 		$(".g-block").click(function(){
+
 			if(an){
-				tcd.stepFunc(function(n){
-					$g.html("预备开始:"+(4-n));
-					$m.fadeIn(400).delay(200).fadeOut(200);
-				});
-				tcd.start(function(n){
-					tt.loopRestart();
-				},-1);
+//				tcd.stepFunc(function(n){
+//					$g.html("预备开始:"+(4-n));
+//					$m.fadeIn(400).delay(200).fadeOut(200);
+//				});
+				tt.loopRestart();
+//				tcd.start(function(n){
+//					tt.loopRestart();
+//				},-1);
 			}else{
 				tt.loopStop();
 			}
 			an = !an;
 		});
 
-		gameModule.Data.tr();
 		$("#btn-change").click(function(){
-			$(".g-block").css({"color":"black"});
-			gameModule.Data.tr();
+			gameModule.Layout.updateData();
 		})
 	});
 </script>

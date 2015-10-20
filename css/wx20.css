@@ -25,6 +25,9 @@ body, html {
 .zh-yellow {
   background-color: #ffcc00; }
 
+.zh-redColor {
+  color: red; }
+
 .top1 {
   margin-top: 1em; }
 

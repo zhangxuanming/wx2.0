@@ -17,12 +17,14 @@ gameModule.Layout = (function(my){
     var _layoutConfig = {
         col : 6,
         row : 5,
-        margin :3
+        margin :3,
+        debug:false
     };
     my.getConfig = function(){
         return _layoutConfig;
     };
     var setlayoutConfig  = function(lc){
+        lc.debug = lc.debug || false;
         _layoutConfig = lc || _layoutConfig;
     };
     //取得包围框的大小
@@ -84,25 +86,40 @@ gameModule.Layout = (function(my){
         return _poObj;
     };
 
-    var initBoxObj = function(){
-
-    };
     //根据坐标渲染布局，这里需要接入以后的文字逻辑
     var randerLayout = function(){
         var sizeObj = getSizes();
         var positions = getBoxPostion(sizeObj);
         var gb = "";
         $.each(positions,function(i,v){
-            gb += '<button data-btnid="'+i+'" class="g-block" style="width:'+sizeObj.blockWidth+'px;height:'+sizeObj.blockHeight+'px;top:'+v.y+'px;left:'+ v.x+'px">'+i+'</button>';
+            gb += '<button data-boxid="'+i+'" class="g-block" style="width:'+sizeObj.blockWidth+'px;height:'+sizeObj.blockHeight+'px;top:'+v.y+'px;left:'+ v.x+'px">'+i+'</button>';
         });
         setWrapSize(sizeObj.wrapWidth,sizeObj.wrapHeight);
 
         $gWrap.empty().append(gb);
     };
-
+    //填充数据到box
+    var fillData = function(){
+        var _data = gameModule.Data.getData();
+        _.each(_data,function(v,i){
+            var $box = $('[data-boxid="'+v.pos+'"]');
+            $box.removeClass("zh-redColor");
+            $box.html(v.char);
+            if(_layoutConfig.debug && v.mark>0){
+                $box.addClass("zh-redColor");
+            }
+        });
+        if(_layoutConfig.debug){
+            console.log(_data);
+        }
+    };
     my.update = function(layoutConfig){
         setlayoutConfig(layoutConfig);
         randerLayout();
+        fillData();
+    };
+    my.updateData = function(){
+        fillData();
     };
     my.init = function(layoutConfig){
         my.update(layoutConfig);
