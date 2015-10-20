@@ -209,7 +209,7 @@
 		});
 
 		$("#btn-change").click(function(){
-			gameModule.Layout.updateData();
+			gameModule.Layout.init();
 		});
 
 	});

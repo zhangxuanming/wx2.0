@@ -259,7 +259,7 @@ body, html {
   box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.3);
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-  transition: all 0.25s;
+  transition: all 0.5s;
   -webkit-transition: all 0.25s; }
   .g-block:active {
     background-color: red; }
@@ -306,11 +306,11 @@ body, html {
     transform: scale(0.9) rotateY(360deg); } }
 @-webkit-keyframes selected {
   0% {
-    -webkit-transform: scale(1) rotateX(0deg); }
+    -webkit-transform: scale(1) rotateY(0deg); }
   50% {
-    -webkit-transform: scale(1.3) rotateX(180deg);
+    -webkit-transform: scale(1.3) rotateY(180deg);
     box-shadow: 10px 10px 1px 3px rgba(0, 0, 0, 0.5); }
   100% {
-    -webkit-transform: scale(0.9) rotateX(360deg); } }
+    -webkit-transform: scale(0.9) rotateY(360deg); } }
 
 /*# sourceMappingURL=wx20.css.map */
