@@ -266,6 +266,7 @@ gameModule.Logic = (function(){
     };
     my.updateData = function(){
         _setData();
+        _resetAll();
     };
     my.init = function(){
         _setData();
