@@ -177,15 +177,15 @@
 		}
 
 		var tt = gameTimer;
-		tt.setMaxtime(10);
-		tt.setDelay(1000/24);
+		tt.setMaxtime(20);
+//		tt.setDelay(1000/24);
 		tt.updateCallback(function(n){
 			var bl = getBarLegnth();
 			$bar.css({"width":bl+"%"});
-			$g.html(tt.getRunningSecond());
+			$g.html(parseFloat(20 - tt.getRunningSecond()).toFixed(3));
 		});
 		tt.endCallback(function(n){
-			console.log("end la");
+			gameOver();
 		});
 
 		//倒计时
@@ -193,25 +193,54 @@
 		var tcd = new tt.cd(1000);
 		$(".g-block").click(function(){
 
-			if(an){
-//				tcd.stepFunc(function(n){
-//					$g.html("预备开始:"+(4-n));
-//					$m.fadeIn(400).delay(200).fadeOut(200);
-//				});
-				tt.loopRestart();
-//				tcd.start(function(n){
-//					tt.loopRestart();
-//				},-1);
-			}else{
-				tt.loopStop();
-			}
-			an = !an;
+//			if(an){
+////				tcd.stepFunc(function(n){
+////					$g.html("预备开始:"+(4-n));
+////					$m.fadeIn(400).delay(200).fadeOut(200);
+////				});
+//				tt.loopRestart();
+////				tcd.start(function(n){
+////					tt.loopRestart();
+////				},-1);
+//			}else{
+//				tt.loopStop();
+//			}
+//			an = !an;
 		});
 
 		$("#btn-change").click(function(){
-			gameModule.Layout.init();
+			var audio = new Audio("src/sound/kick.wav");
+			audio.play();
+			gameModule.Logic.init();
 		});
 
+		var _startFlag = true;
+		$(document).on({
+			click:function(e){
+				if(_startFlag){
+					tt.start();
+					_startFlag = false;
+				}
+				gameModule.Logic.callBoxAction($(this)
+					,function(isBox){
+						if(isBox){
+							tt.changeRuningSecond(2);
+						}else{
+							tt.changeRuningSecond(-2);
+						}
+					}
+					,function(){
+						gameOver();
+				});
+			}
+		},".g-block");
+
+		function gameOver(){
+			tt.stop(true);
+			alert("game over");
+			gameModule.Logic.init();
+			_startFlag = true;
+		}
 	});
 </script>
 </body>

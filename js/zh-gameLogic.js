@@ -5,8 +5,7 @@
 //内容加载
 gameModule.Data = (function(my){
     var _zhDicPool = '平易近人 宽宏大度 冰清玉洁 持之以恒 锲而不舍 废寝忘食 临危不俱 光明磊落 不屈不挠 鞠躬尽瘁 死而后已 料事如神 足智多谋 融会贯通 学贯中西 博古通今 才华横溢 博大精深 集思广益 举一反三 憨态可掬 文质彬彬 风度翩翩 相貌堂堂 落落大方 斗志昂扬 大义凛然 出类拔萃 意气风发 威风凛凛 容光焕发 神采奕奕 悠然自得 眉飞色舞 喜笑颜开 神采奕奕 欣喜若狂 呆若木鸡 垂头丧气 无动于衷 勃然大怒 能说会道 巧舌如簧 能言善辩 滔滔不绝 伶牙俐齿 出口成章 娓娓而谈 妙语连珠 口若悬河 三顾茅庐 铁杵成针 望梅止渴 完璧归赵 四面楚歌 负荆请罪 手不释卷 悬梁刺股 凿壁偷光 走马观花 欢呼雀跃 扶老携幼 手舞足蹈 促膝谈心 前俯后仰 跋山涉水 前赴后继 张牙舞爪 恩重如山 深情厚谊 手足情深 形影不离 血浓于水 志同道合 赤诚相待 肝胆相照 生死相依 循序渐进 日积月累 温故知新 勤能补拙 笨鸟先飞 学无止境 滴水穿石 发奋图强 开卷有益 自相矛盾 滥竽充数 画龙点睛 刻舟求剑 守株待兔 叶公好龙 画蛇添足 掩耳盗铃 买椟还珠 无懈可击 锐不可当 雷厉风行 震耳欲聋 惊心动魄 铺天盖地 气贯长虹 万马奔腾 如履平地 春寒料峭 春意盎然 春暖花开 满园春色 春华秋实 春风化雨 暑气蒸人 烈日炎炎 秋风送爽 秋高气爽 秋色宜人 冰天雪地 寒冬腊月 济济一堂 热火朝天 门庭若市 万人空巷 座无虚席 高朋满座 蒸蒸日上 欣欣向荣 川流不息 美不胜收 蔚为壮观 富丽堂皇 金碧辉煌 玉宇琼楼 美妙绝伦 巧夺天工 锦上添花 粉妆玉砌 别有洞天 喜出望外 语惊四座 精忠报国 奔走相告 风雨同舟 学海无涯 亡羊补牢 势如破竹 骄阳似火 寒气袭人 如火如荼';
-
-    var _wordsCount = 3;
+    var _wordsCount = 3;//设置取词多少
     var _restWordsCount = 10;
     var _currentData = null;
 
@@ -74,6 +73,7 @@ gameModule.Data = (function(my){
             dataObj[i] = {
                 pos:i,
                 ref:-1,
+                reflen:-1,
                 index:-1,
                 from:-1,
                 to:-1,
@@ -106,6 +106,7 @@ gameModule.Data = (function(my){
                 _temp[_pos]={
                     index:_j,
                     pos:_pos,
+                    len:_l,
                     char:cw[_i][_j],
                     from:_prebox,
                     to:_nextBox,
@@ -119,6 +120,7 @@ gameModule.Data = (function(my){
                 _.each(_temp,function(v,i){
                     dataObj[v.pos].index = v.index;
                     dataObj[v.pos].ref = _i;
+                    dataObj[v.pos].reflen = v.len;
                     dataObj[v.pos].char = v.char;
                     dataObj[v.pos].from = v.from;
                     dataObj[v.pos].to = v.to;
@@ -138,31 +140,44 @@ gameModule.Data = (function(my){
     my.newData = function(){
         return _setData();
     };
+    my.getCorrectCount = function(){
+        return _wordsCount;
+    };
     my.getCurrentData = function(){
+        //return {
+        //    data:_currentData,
+        //    count:_wordsCount
+        //}
         return _currentData;
     };
     return my;
 })(gameModule.Data || {});
 
-//游戏逻辑模块
+
+/*
+ *  游戏逻辑模块
+ */
 gameModule.Logic = (function(){
     var my = {}
         ,_data = null
-        ,_passCondition = 0
         ,_doms = {
             box:".g-block",
             startBtn:".g-start"
         }
-        ,_selectedCss = "g-blockSelected";
+        ,_selectedCss = "g-blockSelected"
+        ,_victorCondition = 3;
 
     //设定数据
     var _setData = function(){
         _data = gameModule.Data.getCurrentData();
     };
+    var _setVicCondition = function(){
+        _victorCondition = gameModule.Data.getCorrectCount();
+    };
 
     //过关判定
     var _checkVictor = function(){
-        if(_victorRef.length >= 3){
+        if(_victorRef.length >= _victorCondition){
             _victorRef = [];
             return true;
         }else{
@@ -175,6 +190,7 @@ gameModule.Logic = (function(){
         ,_selectedRef = []
         ,_selectedObj = []
         ,_victorRef = []
+        ,_collectedWords = []
         ,_lastPos = [];//保留本次check链用于清空css
     var _resetArr = function(){
         _lastPos = _selectedPos;
@@ -265,49 +281,109 @@ gameModule.Logic = (function(){
             return false;
         }
     };
-    //box按钮处理
-    var action_boxClick = function(){
-        $(document).on({
-            click:function(e){
-                var $box = $(this)
-                    ,bid = $box.attr("data-boxid")
-                    ,boxObj = _data[bid]
-                    ,isBox = false
-                    ,isV = false;
-                if(_.indexOf(_victorRef,boxObj.ref)>=0){
-                    return
-                }
-                //isBox = _checkBox(boxObj);
-                isBox = _checkBox1(boxObj);
-                if(isBox){
-                    $box.addClass(_selectedCss);
-                }else{
-                    _.each(_lastPos,function(v,i){
-                       $('[data-boxid="'+v+'"]').removeClass(_selectedCss);
-                    });
-                }
-                isV = _checkVictor();
-                if(isV){
-                    alert("过了，鼓掌！！！");
-                    //重玩
-                    _resetAll();
-                    gameModule.Layout.init();
-                }
-            }
-        },_doms.box);
+
+    var _clearClass = function(){
+        _.each(_lastPos,function(v,i){
+            $('[data-boxid="'+v+'"]').removeClass(_selectedCss);
+        });
     };
+
+    var getLastSuccessWordsRef = function(){
+        return _.last(_victorRef);
+    };
+    var _boxAction = function($box,stepCallBack,victorCallBack){
+        var bid = $box.attr("data-boxid")
+            ,boxObj = _data[bid]
+            ,isBox = false
+            ,isV = false;
+        if(_.indexOf(_victorRef,boxObj.ref)>=0){
+            return
+        }
+        isBox = _checkBox1(boxObj);
+        if(isBox){
+            $box.addClass(_selectedCss);
+        }else{
+            _clearClass();
+        }
+        stepCallBack(isBox);
+        isV = _checkVictor();
+        if(isV){
+            if (victorCallBack){
+                victorCallBack()
+            }
+        }
+    };
+    //box按钮处理
+    //var action_boxClick = function(){
+    //    $(document).on({
+    //        click:function(e){
+    //            var $box = $(this)
+    //                ,bid = $box.attr("data-boxid")
+    //                ,boxObj = _data[bid]
+    //                ,isBox = false
+    //                ,isV = false;
+    //            if(_.indexOf(_victorRef,boxObj.ref)>=0){
+    //                return
+    //            }
+    //            isBox = _checkBox1(boxObj);
+    //            if(isBox){
+    //                $box.addClass(_selectedCss);
+    //            }else{
+    //                _clearClass();
+    //            }
+    //            isV = _checkVictor();
+    //            if(isV){
+    //                alert("过了，鼓掌！！！");
+    //                restart();
+    //            }
+    //        }
+    //    },_doms.box);
+    //};
+
+    var _domAction = function(){
+        //$(document).on({
+        //    click:function(e){
+        //        _boxAction($(this),function(){
+        //            alert("胜利啦");
+        //        })
+        //    }
+        //},_doms.box);
+    };
+
+    //重玩
+    var _restart = function(){
+        gameModule.Layout.init();
+        _resetAll();
+        _setData();
+        _setVicCondition();
+    };
+
+    //传出box控制方法
+    my.callBoxAction = function($box,stepCallBack,victorCallback){
+        _boxAction($box,stepCallBack,victorCallback);
+    };
+
+    //外部调用重新开局
+    //my.restart = function(){
+    //    _restart();
+    //};
 
     //绑定动作
     var _actionBinding = function(){
-        action_boxClick();
+        //action_boxClick();
+        //_domAction();
     };
-    my.updateData = function(){
-        _setData();
-        _resetAll();
-    };
+
+    //更新数据  应该不用吧
+    //my.updateData = function(){
+    //    _resetAll();
+    //    _setData();
+    //    _setVicCondition();
+    //};
     my.init = function(){
-        _setData();
-        _actionBinding();
+        //_setData();
+        //_actionBinding();
+        _restart();
     };
     return my;
 }());

@@ -4,10 +4,12 @@
 
 var gameTimer = (function(my){
     var _n = 0;
-    var onOff = false;
+    var _n = 0;
+    var s = 0;
+    var isStop = false;
     var instance = null;
     var _maxTime = -1;
-    var _delay = 100;
+    var _delay = 1000/24;
     var _callback = {};
     my.getCount = function(){
         return _n;
@@ -25,7 +27,13 @@ var gameTimer = (function(my){
         return _maxTime;
     };
     my.getRunningSecond = function(){
+        if(parseFloat(_n*_delay/1000).toFixed(3)>_maxTime){
+            return _maxTime;
+        }
         return parseFloat(_n*_delay/1000).toFixed(3);
+    };
+    my.changeRuningSecond = function(second){
+        _n = (_n - second*1000/_delay)>0 ? _n - second*1000/_delay : 0;
     };
     my.updateCallback = function(callBack){
         _callback['update'] = callBack || function(){};
@@ -33,20 +41,26 @@ var gameTimer = (function(my){
     my.endCallback = function(callBack){
         _callback['end'] = callBack || function(){ console.log()};
     };
+    var _checkShouldEnd = function(){
+        return ((_n*_delay/1000 > _maxTime) && _maxTime>0);
+    };
     //主函数 递归调用
+
+
     var setTime = function(){
         if(!my.updateCallback){
             return;
         }
-        if ((_n*_delay/1000 > _maxTime) && _maxTime>0){
-            onOff = false;
+        if (_checkShouldEnd()){
+            isStop = false;
             if(_callback['end']){
                 _callback['end']();
             }
+            _n = 0;
             return;
         }
         instance = window.setTimeout(function(){
-            if (!onOff){
+            if (!isStop){
                 if(_callback['update']){
                     _callback['update'](_n);
                 }
@@ -56,17 +70,20 @@ var gameTimer = (function(my){
             }
         },_delay);
     };
-    my.loopStart = function(){
-        onOff  = false;
+
+    my.start = function(){
+        isStop = false;
         setTime();
+        //setTime1();
     };
-    my.loopStop = function(){
-        onOff  = true;
+    my.stop = function(reset){
+        _n = reset ? 0 : _n;
+        isStop = true;
         window.clearTimeout(instance);
     };
-    my.loopRestart = function(){
+    my.restart = function(){
         _n = 0;
-        onOff  = false;
+        isStop = false;
         setTime();
     };
     return my;

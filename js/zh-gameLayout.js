@@ -119,7 +119,7 @@ gameModule.Layout = (function(my){
         setlayoutConfig(layoutConfig);
         randerLayout();
         fillData();
-        gameModule.Logic.updateData();
+        //gameModule.Logic.updateData();
     };
     my.updateData = function(){
         fillData();
