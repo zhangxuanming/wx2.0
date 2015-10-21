@@ -228,6 +228,43 @@ gameModule.Logic = (function(){
             return false;
         }
     };
+    var _checkBox1 = function(boxObj){
+        if(!boxObj){
+            return false;
+        }
+        var lastObj;
+        lastObj = _.last(_selectedObj);
+        _selectedIndex.push(boxObj.index);
+        _selectedPos.push(boxObj.pos);
+        _selectedRef.push(boxObj.ref);
+        _selectedObj.push(boxObj);
+        if(boxObj.ref<0 || (_selectedPos.length === 1 && boxObj.index!==0)){
+            _resetArr();
+            return false;
+        }
+        if(_selectedPos.length === 1 && boxObj.ref>=0 ){
+            return true;
+        }
+        if(lastObj.index<0){
+            _resetArr();
+            return false;
+        }
+        if (boxObj.from >=0 && boxObj.pos == lastObj.to){
+            if(boxObj.index != _selectedObj.length-1){
+                _resetArr();
+                return false
+            }
+            if(boxObj.pos == boxObj.to){
+                _victorRef.push(boxObj.ref);
+                _lastPos = [];
+                _resetArr();
+            }
+            return true;
+        }else{
+            _resetArr();
+            return false;
+        }
+    };
     //box按钮处理
     var action_boxClick = function(){
         $(document).on({
@@ -237,11 +274,11 @@ gameModule.Logic = (function(){
                     ,boxObj = _data[bid]
                     ,isBox = false
                     ,isV = false;
-                console.log(boxObj);
                 if(_.indexOf(_victorRef,boxObj.ref)>=0){
                     return
                 }
-                isBox = _checkBox(boxObj);
+                //isBox = _checkBox(boxObj);
+                isBox = _checkBox1(boxObj);
                 if(isBox){
                     $box.addClass(_selectedCss);
                 }else{
