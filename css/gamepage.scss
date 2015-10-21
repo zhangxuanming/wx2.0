@@ -44,8 +44,8 @@
 //    transition: all 0.5s;
 //    -webkit-transition: all 0.25s;
     &:active{
-      transition: transform 0.1s, box-shadow 0.1s;
-      -webkit-transition: -webkit-transform 0.1s, -webkit-box-shadow 0.1s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      -webkit-transition: -webkit-transform 0.2s, -webkit-box-shadow 0.2s;
       transform: scale(0.8);
       -webkit-transform: scale(0.8);
       box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.5) inset;
@@ -88,8 +88,12 @@
   -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.5);
   transform: scale(0.9) !important;
   -webkit-transform: scale(0.9) !important;
-  animation: selected 0.5s;
-  -webkit-animation: selected 0.5s;
+//  animation-fill-mode: forwards;
+//  -webkit-animation-fill-mode: forwards;
+//  animation-delay: 1s;
+//  -webkit-animation-delay: 1s;
+  animation: selected 0.5s ease-in 0.2s;
+  -webkit-animation: selected 0.5s ease-in 0.2s;
   z-index: 1;
 }
 @keyframes selected {
