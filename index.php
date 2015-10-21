@@ -22,6 +22,7 @@
 	<script src="js/underscore.string.js"></script>
 	<script>_.mixin(s.exports());</script>
     <script src="js/juicer-min.js"></script>
+	<script src="js/howler.min.js"></script>
 	<!-- template engine	-->
 	<script src="css/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 	<!-- <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>-->
@@ -208,9 +209,16 @@
 //			an = !an;
 		});
 
+		var sound1 = new Howl({
+			urls:["src/sound/kick.wav"],
+			buffer:true
+		});
+		var sound2 = new Howl({
+			urls:["src/sound/rippaper.wav"],
+			buffer:true
+		});
 		$("#btn-change").click(function(){
-			var audio = new Audio("src/sound/kick.wav");
-			audio.play();
+			sound1.play();
 			gameModule.Logic.init();
 		});
 
@@ -232,8 +240,7 @@
 					,function(){
 						gameOver();
 				});
-				var audio = new Audio("src/sound/rippaper.wav");
-				audio.play();
+				sound2.play();
 			}
 		},".g-block");
 
