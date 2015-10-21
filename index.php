@@ -232,6 +232,8 @@
 					,function(){
 						gameOver();
 				});
+				var audio = new Audio("src/sound/rippaper.wav");
+				audio.play();
 			}
 		},".g-block");
 
