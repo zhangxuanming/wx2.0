@@ -260,6 +260,12 @@ body, html {
   -webkit-box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.3);
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2); }
   .g-block:active {
+    transition: transform 0.1s, box-shadow 0.1s;
+    -webkit-transition: -webkit-transform 0.1s, -webkit-box-shadow 0.1s;
+    transform: scale(0.9);
+    -webkit-transform: scale(0.9);
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5) inset;
+    -webkit-box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5) inset;
     background-color: red; }
 
 .g-top .g-top-container {
