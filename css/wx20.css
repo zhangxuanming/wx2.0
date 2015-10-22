@@ -34,6 +34,9 @@ body, html {
 .zh-greenColor {
   color: greenyellow; }
 
+.base-wrap {
+  opacity: 0; }
+
 .top1 {
   margin-top: 1em; }
 
@@ -62,11 +65,16 @@ body, html {
   background-color: #fdea93 !important; }
 
 .pagesplash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   background-color: #ffe680;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url("/src/img/splash/bg1.png"); }
+  background-image: url("/src/img/splash/bg1.png");
+  z-index: 10; }
 
 .pagesplash * {
   display: block;
@@ -76,6 +84,20 @@ body, html {
 
 .splash-logo {
   width: 100%; }
+
+.landing {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffe680;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("/src/img/splash/bg1.png");
+  filter: grayscale(0.5);
+  -webkit-filter: grayscale(0.5);
+  z-index: 10; }
 
 /*蒙版层*/
 .zh-overlay-mask {

@@ -82,6 +82,9 @@ body,html {
 .zh-greenColor{
   color:greenyellow;
 }
+.base-wrap{
+  opacity: 0;
+}
 
 @include margin(top1,1em);
 @include btn();
@@ -89,11 +92,16 @@ body,html {
 
 //页面设定
 .pagesplash{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   background-color: #ffe680;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-image: url("/src/img/splash/bg1.png");
+  z-index: 10;
 }
 
 .pagesplash *{
@@ -105,6 +113,20 @@ body,html {
 
 .splash-logo{
   width: 100%;
+}
+.landing{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffe680;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("/src/img/splash/bg1.png");
+  filter: grayscale(0.5);
+  -webkit-filter:grayscale(0.5);
+  z-index: 10;
 }
 
 /*蒙版层*/

@@ -114,6 +114,9 @@ gameModule.Layout = (function(my){
             console.log(_data);
         }
     };
+    my.getBoxPosition = function(){
+        return getBoxPostion(getSizes());
+    };
     my.update = function(layoutConfig){
         layoutConfig = layoutConfig || _layoutConfig;
         setlayoutConfig(layoutConfig);
