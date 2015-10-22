@@ -230,10 +230,12 @@
 
 		var sound1 = new Howl({
 			urls:["src/sound/kick.wav"],
+			volume:1,
 			buffer:true
 		});
 		var sound2 = new Howl({
 			urls:["src/sound/rippaper.wav"],
+			volume:1,
 			buffer:true
 		});
 		$("#btn-change").click(function(){
