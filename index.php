@@ -189,8 +189,8 @@
 				};
 				tl.to($(this),0.2,{display:'none'})
 					.fromTo($(".game-wrap"),0.1,{alpha:0},{alpha:1})
-//					.staggerFromTo($(".g-block"),0.5,{alpha:0,x:_.random(-1000,1000),y:_.random(-1000,1000)},{alpha:1,x:0,y:0},0.05);
-					.staggerFromTo($(".g-block"),1,{alpha:0,rotationY:-180,scale:0.5},{alpha:1,rotationY:0,scale:1},0.05);
+					.staggerFromTo($(".g-block"),0.5,{alpha:0,x:_.random(-1000,1000),y:_.random(-1000,1000)},{alpha:1,x:0,y:0},0.05);
+//					.staggerFromTo($(".g-block"),1,{alpha:0,rotationY:-180,scale:0.5},{alpha:1,rotationY:0,scale:1},0.05);
 			});
 		});
 		gameModule.init({
