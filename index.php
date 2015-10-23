@@ -176,7 +176,6 @@
 			})
 		});
 		$(".landing").click(function(){
-			TweenMax.set($(".g-block"),{alpha:0,x: _.random(-1000,1000),y: _.random(-1000,1000)});
 			$(this).fadeOut(50,function(){
 				var tl = new TimelineMax();
 				var myfunc = function(){
@@ -188,10 +187,10 @@
 					});
 				};
 				tl.to($(this),0.2,{display:'none'})
-					.fromTo($(".game-wrap"),0.1,{alpha:0},{alpha:1,onComplete:myfunc});
-//					.staggerFromTo($(".g-block"),0.2,
-//						{alpha:0,x:_.random(-1000,1000),y:_.random(-1000,1000)},
-//						{alpha:1,x:0,y:0},0.02);
+					.fromTo($(".game-wrap"),0.1,{alpha:0},{alpha:1})
+					.staggerFromTo($(".g-block"),0.2,
+						{alpha:0,x:_.random(-1000,1000),y:_.random(-1000,1000)},
+						{alpha:1,x:0,y:0},0.02);
 
 			});
 		});
