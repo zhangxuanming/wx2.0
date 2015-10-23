@@ -144,10 +144,6 @@ gameModule.Data = (function(my){
         return _wordsCount;
     };
     my.getCurrentData = function(){
-        //return {
-        //    data:_currentData,
-        //    count:_wordsCount
-        //}
         return _currentData;
     };
     return my;
@@ -299,7 +295,7 @@ gameModule.Logic = (function(){
         if(_.indexOf(_victorRef,boxObj.ref)>=0){
             return
         }
-        isBox = _checkBox1(boxObj);
+        isBox = _checkBox(boxObj);
         if(isBox){
             $box.addClass(_selectedCss);
         }else{
@@ -312,42 +308,6 @@ gameModule.Logic = (function(){
                 victorCallBack()
             }
         }
-    };
-    //box按钮处理
-    //var action_boxClick = function(){
-    //    $(document).on({
-    //        click:function(e){
-    //            var $box = $(this)
-    //                ,bid = $box.attr("data-boxid")
-    //                ,boxObj = _data[bid]
-    //                ,isBox = false
-    //                ,isV = false;
-    //            if(_.indexOf(_victorRef,boxObj.ref)>=0){
-    //                return
-    //            }
-    //            isBox = _checkBox1(boxObj);
-    //            if(isBox){
-    //                $box.addClass(_selectedCss);
-    //            }else{
-    //                _clearClass();
-    //            }
-    //            isV = _checkVictor();
-    //            if(isV){
-    //                alert("过了，鼓掌！！！");
-    //                restart();
-    //            }
-    //        }
-    //    },_doms.box);
-    //};
-
-    var _domAction = function(){
-        //$(document).on({
-        //    click:function(e){
-        //        _boxAction($(this),function(){
-        //            alert("胜利啦");
-        //        })
-        //    }
-        //},_doms.box);
     };
 
     //重玩
@@ -363,26 +323,7 @@ gameModule.Logic = (function(){
         _boxAction($box,stepCallBack,victorCallback);
     };
 
-    //外部调用重新开局
-    //my.restart = function(){
-    //    _restart();
-    //};
-
-    //绑定动作
-    var _actionBinding = function(){
-        //action_boxClick();
-        //_domAction();
-    };
-
-    //更新数据  应该不用吧
-    //my.updateData = function(){
-    //    _resetAll();
-    //    _setData();
-    //    _setVicCondition();
-    //};
     my.init = function(){
-        //_setData();
-        //_actionBinding();
         _restart();
     };
     return my;

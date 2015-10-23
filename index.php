@@ -79,12 +79,13 @@
 	</div>
 	<!--	游戏首页页面-->
 	<div class="row page landing full zh-hidden">
-		<div class="col-xs-12 v-center ">
-<!--			<img class="splash-logo" src="src/img/splash/bg2.png" />-->
+		<div class="col-xs-12 v-center">
+			<div class="" style="background-color: red;height: 300px;width: 70%;margin: 0 auto;">
+			</div>
 		</div>
 	</div>
 <!--    游戏页-->
-    <div class="row base-wrap full zh-yellow zh-hidden1">
+    <div class="row game-wrap full zh-yellow">
 <!--	    头部信息-->
 	    <div class="col-sm-12 g-top">
 		    <div class="col-sm-12 center-block" style="padding:0.3em;text-align: center;font-size: 1.2em;color: azure">视觉系颜值高</div>
@@ -170,19 +171,21 @@
 	//		tim(0);
 	$(document).ready(function(){
 		$(".pagesplash").click(function(){
-			$(this).fadeOut(500,function(){
-				$(".landing").fadeIn(500);
-//				$(".base-wrap").css({"opacity":1});
+			$(this).fadeOut(300,function(){
+				$(".landing").fadeIn(300);
 			})
 		});
 		$(".landing").click(function(){
 			$(this).fadeOut(50,function(){
 				var tl = new TimelineMax();
 				tl.to($(this),0.2,{display:'none'})
-					.fromTo($(".base-wrap"),0.5,{alpha:0},{alpha:1});
+					.fromTo($(".game-wrap"),0.5,{alpha:0},{alpha:1})
+					.staggerFromTo($(".g-block"),0.2,
+						{alpha:0,x:_.random(-1000,1000),y:_.random(-1000,1000)},
+						{alpha:1,x:0,y:0},0.02);
+
 			});
 		});
-		console.log(gameModule.Layout.getBoxPosition());
 		gameModule.init({
 			col:6,
 			row:5,

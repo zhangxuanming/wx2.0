@@ -34,7 +34,7 @@ body, html {
 .zh-greenColor {
   color: greenyellow; }
 
-.base-wrap {
+.game-wrap {
   opacity: 0; }
 
 .top1 {
@@ -95,8 +95,7 @@ body, html {
   background-position: center;
   background-repeat: no-repeat;
   background-image: url("/src/img/splash/bg1.png");
-  filter: grayscale(0.5);
-  -webkit-filter: grayscale(0.5);
+  overflow: hidden;
   z-index: 10; }
 
 /*蒙版层*/
@@ -325,18 +324,14 @@ body, html {
   z-index: 1; }
 
 @keyframes selected {
-  0% {
-    transform: scale(1) rotateZ(10deg); }
   5% {
-    transform: scale(1) rotateZ(-10deg); }
+    transform: scale(1) rotateZ(-4deg); }
   10% {
-    transform: scale(1) rotateZ(10deg); }
+    transform: scale(1) rotateZ(6deg); }
   15% {
-    transform: scale(1) rotateZ(-10deg); }
+    transform: scale(1) rotateZ(-3deg); }
   20% {
-    transform: scale(1) rotateZ(10deg); }
-  25% {
-    transform: scale(1) rotateZ(-10deg); }
+    transform: scale(1) rotateZ(7deg); }
   30% {
     transform: scale(1) rotateY(0deg); }
   50% {
@@ -346,17 +341,15 @@ body, html {
     transform: scale(0.9) rotateY(360deg); } }
 @-webkit-keyframes selected {
   0% {
-    -webkit-transform: scale(1) rotateZ(10deg); }
+    transform: scale(1) rotateZ(-5deg); }
   5% {
-    -webkit-transform: scale(1) rotateZ(-10deg); }
+    transform: scale(1) rotateZ(5deg); }
   10% {
-    -webkit-transform: scale(1) rotateZ(10deg); }
+    transform: scale(1) rotateZ(-5deg); }
   15% {
-    -webkit-transform: scale(1) rotateZ(-10deg); }
+    transform: scale(1) rotateZ(5deg); }
   20% {
-    -webkit-transform: scale(1) rotateZ(10deg); }
-  25% {
-    -webkit-transform: scale(1) rotateZ(-10deg); }
+    transform: scale(1) rotateZ(-5deg); }
   30% {
     -webkit-transform: scale(1) rotateY(0deg); }
   0% {
