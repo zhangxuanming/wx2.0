@@ -28,10 +28,15 @@ gameModule.Layout = (function(my){
         lc.debug = lc.debug || false;
         _layoutConfig = lc || _layoutConfig;
     };
+    var getScreenSize = function(){
+        return {
+            width:window.screen.width,
+            height:window.screen.height
+        }
+    };
     //取得包围框的大小
     var getWrapSize = function(){
-        //var _w = $gArea.width();
-        var _w = window.screen.width;
+        var _w = getScreenSize().width;
         _w = _w - _w % _layoutConfig.col;
         return {
             width  : _w,

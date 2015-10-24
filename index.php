@@ -182,7 +182,9 @@
 				var tl = new TimelineMax();
 				tl.to($(this),0.2,{display:'none'})
 					.fromTo($(".game-wrap"),0.1,{alpha:0},{alpha:1})
-					.staggerFromTo($(".g-block"),0.3,{alpha:0,x:_.random(-1000,1000),y:_.random(-1000,1000)},{alpha:1,x:0,y:0,ease:Back.easeInOut},0.05);
+					.staggerFromTo($(".g-block"),0.3,{alpha:0,x:_.random(-1000,1000),y:_.random(-1000,1000)},
+					{alpha:1,scale:1,x:0,y:0,zIndex:"none",ease:Back.easeInOut},0.05);
+				tl.eventCallback("onComplete",function(){TweenMax.set($(".g-block"),{clearProps:"z-index"})});
 			});
 		});
 		gameModule.init({

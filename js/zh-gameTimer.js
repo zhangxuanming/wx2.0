@@ -3,9 +3,8 @@
  */
 
 var gameTimer = (function(my){
+
     var _n = 0;
-    var _n = 0;
-    var s = 0;
     var isStop = false;
     var instance = null;
     var _maxTime = -1;
@@ -44,9 +43,8 @@ var gameTimer = (function(my){
     var _checkShouldEnd = function(){
         return ((_n*_delay/1000 > _maxTime) && _maxTime>0);
     };
+
     //主函数 递归调用
-
-
     var setTime = function(){
         if(!my.updateCallback){
             return;

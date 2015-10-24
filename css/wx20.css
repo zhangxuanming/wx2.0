@@ -289,12 +289,13 @@ body, html {
   background-color: #555;
   width: 100%;
   padding: 0;
-  overflow: hidden; }
+  overflow: visible; }
 
 .g-wrap {
   position: relative;
   margin: 0 auto;
-  background-color: snow; }
+  background-color: snow;
+  overflow: visible; }
 
 .g-block {
   position: absolute;

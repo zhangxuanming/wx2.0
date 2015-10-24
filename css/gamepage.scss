@@ -22,13 +22,14 @@
   background-color: #555;
   width: 100%;
   padding: 0;
-  overflow: hidden;
+  overflow: visible;
 //  text-align: center;
 }
   .g-wrap{
     position: relative;
     margin: 0 auto;
     background-color: snow;
+    overflow: visible;
   }
   .g-block{
     position: absolute;
