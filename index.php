@@ -172,6 +172,13 @@
 
 	//		tim(0);
 	$(document).ready(function(){
+		var bs = new Howl({
+			urls:["src/sound/game7.ogg"],
+			volume:1,
+			buffer:true
+		});
+
+		bs.play();
 		$(".pagesplash").click(function(){
 			$(this).fadeOut(300,function(){
 				$(".landing").fadeIn(300);
@@ -201,11 +208,11 @@
 		}
 
 		var tt = gameTimer;
-		tt.setMaxtime(20);
+		tt.setMaxtime(60);
 		tt.updateCallback(function(n){
 			var bl = getBarLegnth();
 			$bar.css({"width":bl+"%"});
-			$g.html(parseFloat(20 - tt.getRunningSecond()).toFixed(3));
+			$g.html(parseFloat(60 - tt.getRunningSecond()).toFixed(3));
 		});
 		tt.endCallback(function(n){
 			gameOver();
@@ -237,9 +244,9 @@
 				gameModule.Logic.callBoxAction($(this)
 					,function(isBox){
 						if(isBox){
-							tt.changeRuningSecond(2);
+//							tt.changeRuningSecond(2);
 						}else{
-							tt.changeRuningSecond(-2);
+							tt.changeRuningSecond(-5);
 						}
 					}
 					,function(){
