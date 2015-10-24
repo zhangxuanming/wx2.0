@@ -178,8 +178,9 @@
 			buffer:true
 		});
 
-		bs.play();
+//		bs.play();
 		$(".pagesplash").click(function(){
+					bs.play();
 			$(this).fadeOut(300,function(){
 				$(".landing").fadeIn(300);
 			})
