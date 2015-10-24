@@ -35,7 +35,8 @@ body, html {
   color: greenyellow; }
 
 .game-wrap {
-  opacity: 0; }
+  opacity: 0;
+  overflow-x: hidden; }
 
 .top1 {
   margin-top: 1em; }
