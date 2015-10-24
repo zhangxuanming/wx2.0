@@ -230,8 +230,11 @@
 		});
 
 		var _startFlag = true;
+		var boxl = 10;
+		var boxt = 10;
 		$(document).on({
 			click:function(e){
+				boxl = 10;
 				if(_startFlag){
 					tt.start();
 					_startFlag = false;
@@ -244,18 +247,21 @@
 					},
 					collected:function(c){
 						var $b = $('body');
+						var dw = 0;
 						_.each(c,function(v,i){
 							var d = $('[data-boxid='+ v.pos+']');
 							var pos = d.offset();
-							console.log(pos);
 							var cl = d.clone();
+							dw = d.width()/2.5;
+							boxl = boxl + dw;
 							cl.removeAttr("data-boxid")
 								.removeClass("g-block")
 								.removeClass('g-blockSelected')
 								.addClass("g-collected");
 							$b.append(cl);
-							TweenMax.fromTo(cl,2,{"left":pos.left,"top":pos.top},{"top":"10px","left":"10px",delay:0,ease:Back.easeInOut},0.3,"+=2");
+							TweenMax.fromTo(cl,2,{"left":pos.left,"top":pos.top},{"top":boxt+"px","left":boxl+"px",delay:0,ease:Back.easeInOut},0.3,"+=2");
 						});
+						boxt = boxt+dw;
 					},
 					victorfunc:function(c){
 						console.log(c);
