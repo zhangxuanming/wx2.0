@@ -289,7 +289,8 @@ body, html {
   background-color: #555;
   width: 100%;
   padding: 0;
-  overflow: visible; }
+  overflow: visible;
+  bottom: 0; }
 
 .g-wrap {
   position: relative;

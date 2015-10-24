@@ -4,6 +4,9 @@
 
 var gameModule = (function(my){
 
+    my.refresh = function(){
+        this.Logic.init();
+    };
     my.init = function(layoutConfig){
         this.Layout.init(layoutConfig);
         this.Logic.init();

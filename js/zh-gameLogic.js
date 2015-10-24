@@ -186,10 +186,11 @@ gameModule.Logic = (function(){
         ,_selectedRef = []
         ,_selectedObj = []
         ,_victorRef = []
-        ,_collectedWords = []
+        ,_collectedWords = []//收集过的
+        ,_collectedWordsArr = {}//收集过的obj
         ,_lastPos = [];//保留本次check链用于清空css
     var _resetArr = function(){
-        _lastPos = _selectedPos;
+        _lastPos = _selectedPos; //记录上一次选择的结果
         _selectedPos = [];
         _selectedRef = [];
         _selectedIndex = [];
@@ -198,7 +199,18 @@ gameModule.Logic = (function(){
     var _resetAll = function(){
         _resetArr();
         _victorRef = [];
+        _collectedWords=[];
+        _collectedWordsArr = {};
         _lastPos = [];
+    };
+
+    var _checkNewCollection = function(){
+        var nc = _.difference(_victorRef,_collectedWords);
+        if(nc.length>0){
+            _collectedWords.push(nc[0]);
+            return nc
+        }
+        return false;
     };
 
     var checkLogic = {
@@ -233,6 +245,7 @@ gameModule.Logic = (function(){
                 _selectedObj.push(boxObj);
                 if(boxObj.pos == boxObj.to){
                     _victorRef.push(boxObj.ref);
+                    _collectedWordsArr[boxObj.ref] = _selectedObj;
                     _lastPos = [];
                     _resetArr();
                 }
@@ -270,6 +283,7 @@ gameModule.Logic = (function(){
                 }
                 if(boxObj.pos == boxObj.to){
                     _victorRef.push(boxObj.ref);
+                    _collectedWordsArr[boxObj.ref] = _selectedObj;
                     _lastPos = [];
                     _resetArr();
                 }
@@ -290,10 +304,12 @@ gameModule.Logic = (function(){
     var getLastSuccessWordsRef = function(){
         return _.last(_victorRef);
     };
-    var _boxAction = function($box,stepCallBack,victorCallBack){
+    var _boxAction = function($box,callback){
+        var _callBack = callback || {};
         var bid = $box.attr("data-boxid")
             ,boxObj = _data[bid]
             ,isBox = false
+            ,isNewCollected = false
             ,isV = false;
         if(_.indexOf(_victorRef,boxObj.ref)>=0){
             return
@@ -304,11 +320,18 @@ gameModule.Logic = (function(){
         }else{
             _clearClass();
         }
-        stepCallBack(isBox);
+
+        callback['stepfunc'](isBox);
+        isNewCollected = _checkNewCollection();
+        if(!!isNewCollected){
+            if(typeof(callback['collected']) == 'function'){
+                callback['collected'](_collectedWordsArr[isNewCollected[0]]);
+            }
+        }
         isV = _checkVictor();
         if(isV){
-            if (victorCallBack){
-                victorCallBack()
+            if(callback['victorfunc']){
+                callback['victorfunc']();
             }
         }
     };
@@ -322,8 +345,8 @@ gameModule.Logic = (function(){
     };
 
     //传出box控制方法
-    my.callBoxAction = function($box,stepCallBack,victorCallback){
-        _boxAction($box,stepCallBack,victorCallback);
+    my.callBoxAction = function($box,callback){
+        _boxAction($box,callback);
     };
 
     my.init = function(){

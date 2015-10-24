@@ -116,7 +116,7 @@
 	    </div>
 <!--	    底部操作区-->
 	    <div class="col-sm-12 g-bottom">
-		    <div id="btn-change" class="btn zh-yellow btn-block">太难了，换一个</div>
+		    <div id="btn-refresh" class="btn zh-yellow btn-block">太难了，换一个</div>
 	    </div>
     </div>
 
@@ -172,15 +172,8 @@
 
 	//		tim(0);
 	$(document).ready(function(){
-		var bs = new Howl({
-			urls:["src/sound/game7.ogg"],
-			volume:1,
-			buffer:true
-		});
-
-//		bs.play();
+		console.log(gameModule);
 		$(".pagesplash").click(function(){
-					bs.play();
 			$(this).fadeOut(300,function(){
 				$(".landing").fadeIn(300);
 			})
@@ -191,7 +184,7 @@
 				tl.to($(this),0.2,{display:'none'})
 					.fromTo($(".game-wrap"),0.1,{alpha:0},{alpha:1})
 					.staggerFromTo($(".g-block"),0.3,{alpha:0,x:_.random(-1000,1000),y:_.random(-1000,1000)},
-					{alpha:1,scale:1,x:0,y:0,zIndex:"none",ease:Back.easeInOut},0.05);
+					{alpha:1,scale:1,x:0,y:0,zIndex:"none",ease:Back.easeInOut},0.02);
 				tl.eventCallback("onComplete",function(){TweenMax.set($(".g-block"),{clearProps:"z-index"})});
 			});
 		});
@@ -230,9 +223,10 @@
 			volume:1,
 			buffer:true
 		});
-		$("#btn-change").click(function(){
+		$("#btn-refresh").click(function(){
 			sound1.play();
-			gameModule.Logic.init();
+			gameModule.refresh();
+			tt.changeRuningSecond(-5);
 		});
 
 		var _startFlag = true;
@@ -242,16 +236,29 @@
 					tt.start();
 					_startFlag = false;
 				}
-				gameModule.Logic.callBoxAction($(this)
-					,function(isBox){
-						if(isBox){
-//							tt.changeRuningSecond(2);
-						}else{
+				gameModule.Logic.callBoxAction($(this),{
+					stepfunc:function(isBox){
+						if(!isBox){
 							tt.changeRuningSecond(-5);
 						}
-					}
-					,function(){
+					},
+					collected:function(c){
+						var $b = $('body');
+						_.each(c,function(v,i){
+							var d = $('[data-boxid='+ v.pos+']');
+							var pos = d.offset();
+							console.log(pos);
+							var cl = d.clone();
+							cl.removeAttr("data-boxid");
+							cl.css({"z-index":"1"});
+							cl.removeClass('g-blockSelected');
+							$b.append(cl);
+							TweenMax.staggerFromTo(cl,1,{"left":pos.left,"top":pos.top},{"top":"10px","left":"10px"},0.1);
+						});
+					},
+					victorfunc:function(){
 						gameOver();
+					}
 				});
 				sound2.play();
 			}
