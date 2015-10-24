@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="target-densitydpi=device-dpi,width=640,width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>嗨！冒险 之 成语挑战！</title>
+    <title>四目矩阵！</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet">
@@ -79,9 +79,11 @@
 	</div>
 	<!--	游戏首页页面-->
 	<div class="row page landing full zh-hidden">
-		<div class="col-xs-12 v-center">
-			<div class="" style="background-color: red;height: 300px;width: 70%;margin: 0 auto;">
-			</div>
+		<div class="l-gamedes center-block">
+		</div>
+		<div class="l-btnWrap col-xs-12">
+			<button class="btn btn-block btn-default g-startBtn l-btn">开始游戏</button>
+			<button class="btn btn-block btn-default g-aboutBtn l-btn">关于</button>
 		</div>
 	</div>
 <!--    游戏页-->
@@ -175,22 +177,12 @@
 				$(".landing").fadeIn(300);
 			})
 		});
-		$(".landing").click(function(){
-			$(this).fadeOut(50,function(){
+		$(".g-startBtn").click(function(){
+			$(".landing").fadeOut(50,function(){
 				var tl = new TimelineMax();
-				var myfunc = function(){
-					_.each($(".g-block"),function(v,i){
-						TweenMax.set(v,{alpha:0,x: _.random(-1000,1000),y: _.random(-1000,1000)});
-						TweenMax.to(v,1,{alpha:1,x:0,y:0,ease:Back.easeOut});
-//						setTimeout(function(){
-//							TweenMax.to(v,1,{alpha:1,x:0,y:0,ease:Back.easeOut});
-//						},i*30);
-					});
-				};
 				tl.to($(this),0.2,{display:'none'})
 					.fromTo($(".game-wrap"),0.1,{alpha:0},{alpha:1})
-					.staggerFromTo($(".g-block"),0.5,{alpha:0,x:_.random(-1000,1000),y:_.random(-1000,1000)},{alpha:1,x:0,y:0},0.05);
-//					.staggerFromTo($(".g-block"),1,{alpha:0,rotationY:-180,scale:0.5},{alpha:1,rotationY:0,scale:1},0.05);
+					.staggerFromTo($(".g-block"),0.3,{alpha:0,x:_.random(-1000,1000),y:_.random(-1000,1000)},{alpha:1,x:0,y:0,ease:Back.easeInOut},0.05);
 			});
 		});
 		gameModule.init({
@@ -208,7 +200,6 @@
 
 		var tt = gameTimer;
 		tt.setMaxtime(20);
-//		tt.setDelay(1000/24);
 		tt.updateCallback(function(n){
 			var bl = getBarLegnth();
 			$bar.css({"width":bl+"%"});
@@ -219,25 +210,6 @@
 		});
 
 		//倒计时
-		var an = true;
-		var tcd = new tt.cd(1000);
-		$(".g-block").click(function(){
-
-//			if(an){
-////				tcd.stepFunc(function(n){
-////					$g.html("预备开始:"+(4-n));
-////					$m.fadeIn(400).delay(200).fadeOut(200);
-////				});
-//				tt.loopRestart();
-////				tcd.start(function(n){
-////					tt.loopRestart();
-////				},-1);
-//			}else{
-//				tt.loopStop();
-//			}
-//			an = !an;
-		});
-
 		var sound1 = new Howl({
 			urls:["src/sound/kick.wav"],
 			volume:1,

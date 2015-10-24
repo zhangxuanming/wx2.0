@@ -30,7 +30,8 @@ gameModule.Layout = (function(my){
     };
     //取得包围框的大小
     var getWrapSize = function(){
-        var _w = $gArea.width();
+        //var _w = $gArea.width();
+        var _w = window.screen.width;
         _w = _w - _w % _layoutConfig.col;
         return {
             width  : _w,

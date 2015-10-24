@@ -119,13 +119,50 @@ body,html {
   top: 0;
   left: 0;
   right: 0;
-  background-color: #ffe680;
+//  background-color: #ffe680;
+  background-color: $zhBlack;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url("/src/img/splash/bg1.png");
+//  background-image: url("/src/img/splash/bg1.png");
   overflow: hidden;
   z-index: 10;
+  .l-gamedes{
+    height: 60%;
+    width: 100%;
+    margin: 0 auto;
+    background-color: $zhBlack
+  }
+  .l-btnWrap{
+    background-color: rgba(0,0,0,0.1);
+    position: fixed;
+    bottom: 0;
+    height: 30%;
+    left: 0;
+    padding-top: 15px;
+    .l-btn{
+      width: 70%;
+      margin: 0 auto;
+      outline: none;
+      background-color: rgba(0,0,0,0.6);
+      font-size: 2em;
+      color: #03A9F4;
+        border: 1px solid #03A9F4;
+      border-radius: 0;
+      -webkit-border-radius: 0;
+      margin-top: 10px;
+      &:active{
+        background-color: #444;
+        color: #ffffff;
+      }
+    }
+    .g-startBtn{
+
+    }
+    .g-aboutBtn{
+
+    }
+  }
 }
 
 /*蒙版层*/
