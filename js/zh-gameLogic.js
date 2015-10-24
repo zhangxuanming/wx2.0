@@ -314,7 +314,7 @@ gameModule.Logic = (function(){
         if(_.indexOf(_victorRef,boxObj.ref)>=0){
             return
         }
-        isBox = checkLogic._checkBox(boxObj);
+        isBox = checkLogic._checkBox1(boxObj);
         if(isBox){
             $box.addClass(_selectedCss);
         }else{
