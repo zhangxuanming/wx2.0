@@ -249,14 +249,16 @@
 							var pos = d.offset();
 							console.log(pos);
 							var cl = d.clone();
-							cl.removeAttr("data-boxid");
-							cl.css({"z-index":"1"});
-							cl.removeClass('g-blockSelected');
+							cl.removeAttr("data-boxid")
+								.removeClass("g-block")
+								.removeClass('g-blockSelected')
+								.addClass("g-collected");
 							$b.append(cl);
-							TweenMax.staggerFromTo(cl,1,{"left":pos.left,"top":pos.top},{"top":"10px","left":"10px"},0.1);
+							TweenMax.fromTo(cl,2,{"left":pos.left,"top":pos.top},{"top":"10px","left":"10px",delay:0,ease:Back.easeInOut},0.3,"+=2");
 						});
 					},
-					victorfunc:function(){
+					victorfunc:function(c){
+						console.log(c);
 						gameOver();
 					}
 				});

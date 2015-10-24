@@ -331,7 +331,7 @@ gameModule.Logic = (function(){
         isV = _checkVictor();
         if(isV){
             if(callback['victorfunc']){
-                callback['victorfunc']();
+                callback['victorfunc'](_collectedWordsArr);
             }
         }
     };

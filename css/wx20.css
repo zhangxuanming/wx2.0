@@ -339,6 +339,24 @@ body, html {
     -webkit-transition: width 0.05s;
     z-index: 1; }
 
+.g-collected {
+  position: absolute;
+  outline: none;
+  font-size: 1.5em;
+  color: azure;
+  border: 2px solid blueviolet;
+  padding: 0;
+  background-color: #333;
+  transition: scale 0.2s, color 0.2s;
+  -webkit-transition: scale 0.2s, color 0.2s;
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+  transform: scale(0.6) !important;
+  -webkit-transform: scale(0.6) !important;
+  animation: collected 2s ease-in 0.2s;
+  -webkit-animation: collected 2s ease-in 0.2s;
+  z-index: 1; }
+
 .g-blockSelected {
   background-color: dodgerblue;
   color: #ffffff;
@@ -386,5 +404,21 @@ body, html {
     box-shadow: 10px 10px 1px 3px rgba(0, 0, 0, 0.5); }
   100% {
     -webkit-transform: scale(0.9) rotateY(360deg); } }
+@keyframes collected {
+  0% {
+    transform: scale(1) rotateZ(0deg); }
+  80% {
+    transform: scale(1.4) rotateZ(180deg);
+    box-shadow: 10px 10px 1px 3px rgba(0, 0, 0, 0.5); }
+  100% {
+    transform: scale(0.6) rotateZ(360deg); } }
+@-webkit-keyframes collected {
+  0% {
+    -webkit-transform: scale(1) rotateZ(0deg); }
+  80% {
+    -webkit-transform: scale(1.4) rotateZ(180deg);
+    box-shadow: 10px 10px 1px 3px rgba(0, 0, 0, 0.5); }
+  100% {
+    -webkit-transform: scale(0.6) rotateZ(360deg); } }
 
 /*# sourceMappingURL=wx20.css.map */
