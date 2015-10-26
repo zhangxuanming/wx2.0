@@ -255,7 +255,8 @@
 				}
 				var $box = $(this);
 				var boxId = $box.attr("data-boxid");
-				var isBoxObject = gameModule.Logic.test(boxId);
+				var isBoxObject = gameModule.Logic.checkBox(boxId); //取得判定结果
+
 				if(!isBoxObject.isBox){
 					tt.changeRuningSecond(-5);
 					_.each(isBoxObject.positionHistory,function(v,i){
@@ -267,74 +268,32 @@
 
 				if(isBoxObject.isNewCollected){
 					var $b = $('body');
-						var dw = 0;
-						_.each(isBoxObject.isNewCollected,function(v,i){
-							var d = $('[data-boxid='+ v.pos+']');
-							var pos = d.offset();
-							var cl = d.clone();
-							var cbSize = {
-								width:d.width()/2,
-								height: d.width()/2
-							};
-							dw = d.width()/2.5;
-							boxl = boxl + dw;
-							cl.removeAttr("data-boxid")
-								.removeClass("g-block")
-								.removeClass('g-blockSelected')
-								.addClass("g-collected");
-							$b.append(cl);
-							TweenMax.fromTo(cl,2
-								,{"left":pos.left,"top":pos.top}
-								,{"top":boxt+"px","left":boxl+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"1em",delay:0,ease:Back.easeInOut}
-								,0.3,"+=2");
-						});
-						boxt = boxt+dw;
+					var dw = 0;
+					_.each(isBoxObject.isNewCollected,function(v,i){
+						var d = $('[data-boxid='+ v.pos+']');
+						var pos = d.offset();
+						var cl = d.clone();
+						var cbSize = {
+							width:d.width()/2,
+							height: d.width()/2
+						};
+						dw = d.width()/2.5;
+						boxl = boxl + dw;
+						cl.removeAttr("data-boxid")
+							.removeClass("g-block")
+							.removeClass('g-blockSelected')
+							.addClass("g-collected");
+						$b.append(cl);
+						TweenMax.fromTo(cl,2
+							,{"left":pos.left,"top":pos.top}
+							,{"top":boxt+"px","left":boxl+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"1em",delay:0,ease:Back.easeInOut}
+							,0.3,"+=2");
+					});
+					boxt = boxt+dw;
 				}
-
 				if(isBoxObject.isVictory){
 					gameOver();
 				}
-
-//				gameModule.Logic.callBoxAction(boxId,{
-//					stepfunc:function(isBoxObj){
-//						if(!isBoxObj.isBox){
-//							tt.changeRuningSecond(-5);
-//							_.each(isBoxObj.positionHistory,function(v,i){
-//								$('[data-boxid="'+v+'"]').removeClass(_selectedCss);
-//							})
-//						}else{
-//							$box.addClass(_selectedCss);
-//						}
-//					},
-//					collected:function(c){
-//						var $b = $('body');
-//						var dw = 0;
-//						_.each(c,function(v,i){
-//							var d = $('[data-boxid='+ v.pos+']');
-//							var pos = d.offset();
-//							var cl = d.clone();
-//							var cbSize = {
-//								width:d.width()/2,
-//								height: d.width()/2
-//							};
-//							dw = d.width()/2.5;
-//							boxl = boxl + dw;
-//							cl.removeAttr("data-boxid")
-//								.removeClass("g-block")
-//								.removeClass('g-blockSelected')
-//								.addClass("g-collected");
-//							$b.append(cl);
-//							TweenMax.fromTo(cl,2
-//								,{"left":pos.left,"top":pos.top}
-//								,{"top":boxt+"px","left":boxl+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"1em",delay:0,ease:Back.easeInOut}
-//								,0.3,"+=2");
-//						});
-//						boxt = boxt+dw;
-//					},
-//					victorfunc:function(c){
-//						gameOver();
-//					}
-//				});
 				sound2.play();
 			}
 		},".g-block");

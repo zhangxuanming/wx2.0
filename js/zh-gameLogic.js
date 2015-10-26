@@ -218,7 +218,7 @@ gameModule.Logic = (function(){
         }
     };
 
-    //每次选择触发函数,选择，收集，胜利
+    //每次选择触发函数,选择，收集，胜利（暂时废弃）
     var _boxAction = function(bid,callback){
         var _callBack = callback || {};
         //var bid = $box.attr("data-boxid");
@@ -261,7 +261,7 @@ gameModule.Logic = (function(){
     };
 
     //每次选择触发函数,选择，收集，胜利
-    var _boxAction1 = function(bid){
+    var _boxCheck = function(bid){
         var boxObj = _data[bid]
             ,isBox = false
             ,isBoxObject = {}
@@ -333,10 +333,10 @@ gameModule.Logic = (function(){
     };
     //传出box控制方法
     my.callBoxAction = function(boxId,callback){
-        _boxAction(boxId,callback);
+        //_boxAction(boxId,callback);
     };
-    my.test = function(boxId){
-        return _boxAction1(boxId);
+    my.checkBox = function(boxId){
+        return _boxCheck(boxId);
     };
     my.refresh = function(){
       _refreshMatrix();
