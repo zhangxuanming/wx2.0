@@ -4,12 +4,19 @@
 
 var gameModule = (function(my){
 
+    var _layoutConfig = {
+        col : 6,
+        row : 5,
+        margin :3,
+        debug:false
+    };
     my.refresh = function(){
-        this.Logic.init();
+        this.Logic.refresh();
     };
     my.init = function(layoutConfig){
-        this.Layout.init(layoutConfig);
-        this.Logic.init();
+        _layoutConfig = layoutConfig ? layoutConfig : _layoutConfig;
+        //this.Layout.init(layoutConfig);
+        this.Logic.init(_layoutConfig);
     };
     return my;
 }(gameModule || {}));
@@ -18,12 +25,13 @@ var gameModule = (function(my){
 gameModule.Layout = (function(my){
     var $gArea = $('.g-area')
         ,$gWrap = $('.g-wrap');
+    var _SIZEOBJECT = {};
     var _layoutConfig = {
         col : 6,
         row : 5,
         margin :3,
         debug:false
-    };
+        };
     my.getConfig = function(){
         return _layoutConfig;
     };
@@ -59,12 +67,13 @@ gameModule.Layout = (function(my){
             ,_h = 0;
         _w = Math.floor((_wrapSize.width / _layoutConfig.col) - _layoutConfig.margin);
         _h = _w;
-        return {
+        _SIZEOBJECT =  {
             wrapWidth : _w * _layoutConfig.col + _layoutConfig.margin*(_layoutConfig.col-1),
             wrapHeight : _h * _layoutConfig.row + _layoutConfig.margin * (_layoutConfig.row+1),
             blockWidth  :_w,
             blockHeight :_h
-        }
+        };
+        return _SIZEOBJECT;
     };
 
     //根据size 计算布局确定坐标
@@ -126,14 +135,20 @@ gameModule.Layout = (function(my){
     my.getBoxPosition = function(){
         return getBoxPostion(getSizes());
     };
+    //取得SizeObject
+    my.getSizeObject = function(){
+        return _SIZEOBJECT;
+    };
     my.update = function(layoutConfig){
         layoutConfig = layoutConfig || _layoutConfig;
         setlayoutConfig(layoutConfig);
         randerLayout();
         fillData();
-        //gameModule.Logic.updateData();
     };
     my.updateData = function(){
+        fillData();
+    };
+    my.loadData = function(date){
         fillData();
     };
     my.init = function(layoutConfig){

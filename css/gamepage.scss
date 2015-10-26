@@ -6,7 +6,7 @@
 
 .g-middle{
   background-color: #ffff00;
-  height: 65%;
+//  height: 65%;
 }
 
 .g-bottom {
@@ -18,13 +18,37 @@
 
 }
 .g-area{
-  position: absolute;
+//  position: absolute;
+  position: relative;
   background-color: #555;
   width: 100%;
   padding: 0;
   overflow: visible;
-  bottom: 0;
+//  bottom: 0;
 //  text-align: center;
+}
+.g-collectedBox{
+  background-color: red;
+  padding: 0;
+  margin-bottom: 2px;
+  line-height: 1em;
+  .g-cwrap{
+    position: relative;
+    margin: 0 auto;
+    width: 200px;
+    background-color: #03A9F4;
+  }
+  .g-cbox{
+    display: block;
+    float: left;
+    left: 0;
+    right: 0;
+    background-color: #ffff00;
+    margin: 0;
+    padding: 0;
+    height: 50px;
+    width: 50px;
+  }
 }
   .g-wrap{
     position: relative;
@@ -35,7 +59,7 @@
   .g-block{
     position: absolute;
     outline: none;
-    font-size: 1.5em;
+    font-size: 2em;
     border: 0 solid #ffff00;
     padding: 0;
     box-shadow: 1px 1px 0px 0px rgba(0,0,0,0.3);
@@ -65,23 +89,23 @@
         color: $zhYellow;
       }
     }
-    .g-timebar{
-      position: relative;
-      height: 10px;
-      background-color: $zhYellow;
-      .g-barinner {
-        display: block;
-        position: absolute;
-        left: 0;
-        width: 50%;
-        height: 100%;
-        background:linear-gradient(to left,yellow, red);
-        transition: width 0.05s;
-        -webkit-transition: width 0.05s;
-        z-index: 1;
-      }
-    }
   }
+.g-timebar{
+  position: relative;
+  height: 10px;
+  background-color: $zhYellow;
+  .g-barinner {
+    display: block;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:linear-gradient(to left,yellow, red);
+    transition: width 0.05s;
+    -webkit-transition: width 0.05s;
+    z-index: 1;
+  }
+}
   .g-collected{
     position: absolute;
     outline: none;
@@ -94,8 +118,8 @@
     -webkit-transition: scale 0.2s, color 0.2s;
     box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.5);
     -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.5);
-    transform: scale(0.6) !important;
-    -webkit-transform: scale(0.6) !important;
+//    transform: scale(1) !important;
+//    -webkit-transform: scale(1) !important;
     animation: collected 2s ease-in 0.2s;
     -webkit-animation: collected 2s ease-in 0.2s;
     z-index: 1;
@@ -140,12 +164,12 @@ $a:-5;
 }
 
 @keyframes collected {
-  0%{transform: scale(1) rotateZ(0deg);}
-  80%{transform: scale(1.4) rotateZ(180deg);box-shadow: 10px 10px 1px 3px rgba(0,0,0,0.5)}
-  100%{transform: scale(0.6) rotateZ(360deg)}
+  0%{transform: scale(1)}
+  80%{transform: scale(1.4);box-shadow: 10px 10px 1px 3px rgba(0,0,0,0.5)}
+  100%{transform: scale(1)}
 }
 @-webkit-keyframes collected {
-  0%{-webkit-transform: scale(1) rotateZ(0deg)}
-  80%{-webkit-transform: scale(1.4) rotateZ(180deg);box-shadow: 10px 10px 1px 3px rgba(0,0,0,0.5)}
-  100%{-webkit-transform: scale(0.6) rotateZ(360deg)}
+  0%{-webkit-transform: scale(1)}
+  80%{-webkit-transform: scale(1.4);box-shadow: 10px 10px 1px 3px rgba(0,0,0,0.5)}
+  100%{-webkit-transform: scale(1)}
 }

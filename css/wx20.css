@@ -279,20 +279,39 @@ body, html {
   height: 15%; }
 
 .g-middle {
-  background-color: #ffff00;
-  height: 65%; }
+  background-color: #ffff00; }
 
 .g-bottom {
   background-color: #1b6d85;
   height: 20%; }
 
 .g-area {
-  position: absolute;
+  position: relative;
   background-color: #555;
   width: 100%;
   padding: 0;
-  overflow: visible;
-  bottom: 0; }
+  overflow: visible; }
+
+.g-collectedBox {
+  background-color: red;
+  padding: 0;
+  margin-bottom: 2px;
+  line-height: 1em; }
+  .g-collectedBox .g-cwrap {
+    position: relative;
+    margin: 0 auto;
+    width: 200px;
+    background-color: #03A9F4; }
+  .g-collectedBox .g-cbox {
+    display: block;
+    float: left;
+    left: 0;
+    right: 0;
+    background-color: #ffff00;
+    margin: 0;
+    padding: 0;
+    height: 50px;
+    width: 50px; }
 
 .g-wrap {
   position: relative;
@@ -303,7 +322,7 @@ body, html {
 .g-block {
   position: absolute;
   outline: none;
-  font-size: 1.5em;
+  font-size: 2em;
   border: 0 solid #ffff00;
   padding: 0;
   box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.3);
@@ -326,15 +345,16 @@ body, html {
     font-size: 1.3em;
     font-weight: bolder;
     color: #ffcc00; }
-.g-top .g-timebar {
+
+.g-timebar {
   position: relative;
   height: 10px;
   background-color: #ffcc00; }
-  .g-top .g-timebar .g-barinner {
+  .g-timebar .g-barinner {
     display: block;
     position: absolute;
     left: 0;
-    width: 50%;
+    width: 100%;
     height: 100%;
     background: linear-gradient(to left, yellow, red);
     transition: width 0.05s;
@@ -353,8 +373,6 @@ body, html {
   -webkit-transition: scale 0.2s, color 0.2s;
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
-  transform: scale(0.6) !important;
-  -webkit-transform: scale(0.6) !important;
   animation: collected 2s ease-in 0.2s;
   -webkit-animation: collected 2s ease-in 0.2s;
   z-index: 1; }
@@ -408,19 +426,19 @@ body, html {
     -webkit-transform: scale(0.9) rotateY(360deg); } }
 @keyframes collected {
   0% {
-    transform: scale(1) rotateZ(0deg); }
+    transform: scale(1); }
   80% {
-    transform: scale(1.4) rotateZ(180deg);
+    transform: scale(1.4);
     box-shadow: 10px 10px 1px 3px rgba(0, 0, 0, 0.5); }
   100% {
-    transform: scale(0.6) rotateZ(360deg); } }
+    transform: scale(1); } }
 @-webkit-keyframes collected {
   0% {
-    -webkit-transform: scale(1) rotateZ(0deg); }
+    -webkit-transform: scale(1); }
   80% {
-    -webkit-transform: scale(1.4) rotateZ(180deg);
+    -webkit-transform: scale(1.4);
     box-shadow: 10px 10px 1px 3px rgba(0, 0, 0, 0.5); }
   100% {
-    -webkit-transform: scale(0.6) rotateZ(360deg); } }
+    -webkit-transform: scale(1); } }
 
 /*# sourceMappingURL=wx20.css.map */

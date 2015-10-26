@@ -8,6 +8,7 @@ gameModule.Data = (function(my){
     var _wordsCount = 3;//设置取词多少
     var _restWordsCount = 10;
     var _currentData = null;
+    var _correctCharsNumber = 0;
 
     var _dicArray = function(str){
         return _.words(str);
@@ -55,6 +56,7 @@ gameModule.Data = (function(my){
 
     //计算文字布局数据，并给与位置返回
     var _calculateData = function(preparedWords){
+        _correctCharsNumber = 0;
         var _layoutMatrix = gameModule.Layout.getConfig();
         var _matrix = {
             col:_layoutMatrix.col,
@@ -62,6 +64,7 @@ gameModule.Data = (function(my){
             totalBox: _layoutMatrix.col * _layoutMatrix.row
         };
         var dataObj = {}
+            ,sw = preparedWords.selectedWords
             ,cw = preparedWords.selectedArray
             ,rw = preparedWords.restChars
             ,totalBox = _matrix.totalBox
@@ -78,7 +81,8 @@ gameModule.Data = (function(my){
                 from:-1,
                 to:-1,
                 char: _.sample(rw,1)[0],
-                mark:-1
+                mark:-1,
+                full:-1
             };
         }
         //计算空位
@@ -110,7 +114,8 @@ gameModule.Data = (function(my){
                     char:cw[_i][_j],
                     from:_prebox,
                     to:_nextBox,
-                    mark:1
+                    mark:1,
+                    full:sw[_i]
                 };
                 _prebox = _pos;
                 _pos = _nextBox;
@@ -125,13 +130,19 @@ gameModule.Data = (function(my){
                     dataObj[v.pos].from = v.from;
                     dataObj[v.pos].to = v.to;
                     dataObj[v.pos].mark = v.mark;
+                    dataObj[v.pos].full = v.full;
+                    _correctCharsNumber+=1;
                 });
             }
         }
+        console.log(_correctCharsNumber);
         return dataObj;
     };
     var _setData = function(){
         _currentData = _calculateData(_prepareWords(_wordsCount,_restWordsCount));
+        return _currentData;
+    };
+    my.getCurrentData = function(){
         return _currentData;
     };
     my.setWordsPool = function(wordsPool){
@@ -143,8 +154,8 @@ gameModule.Data = (function(my){
     my.getCorrectCount = function(){
         return _wordsCount;
     };
-    my.getCurrentData = function(){
-        return _currentData;
+    my.getCorrectCharsNumber = function(){
+        return _correctCharsNumber;
     };
     return my;
 })(gameModule.Data || {});
@@ -156,15 +167,16 @@ gameModule.Data = (function(my){
 gameModule.Logic = (function(){
     var my = {}
         ,_data = null
-        ,_doms = {
-            box:".g-block",
-            startBtn:".g-start"
-        }
+        //,_doms = {
+        //    box:".g-block",
+        //    startBtn:".g-start"
+        //}
         ,_selectedCss = "g-blockSelected"
         ,_victorCondition = 3;
 
     //设定数据
-    var _setData = function(){
+    var _loadData = function(){
+        console.log("dateLoaded");
         _data = gameModule.Data.getCurrentData();
     };
     var _setVicCondition = function(){
@@ -188,6 +200,7 @@ gameModule.Logic = (function(){
         ,_victorRef = []
         ,_collectedWords = []//收集过的
         ,_collectedWordsArr = {}//收集过的obj
+        ,_totalCollected = {}
         ,_lastPos = [];//保留本次check链用于清空css
     var _resetArr = function(){
         _lastPos = _selectedPos; //记录上一次选择的结果
@@ -204,6 +217,13 @@ gameModule.Logic = (function(){
         _lastPos = [];
     };
 
+    var _restTotalCollected = function(){
+        _totalCollected = [];
+    };
+    var _getCollectionBox = function(){
+        return _collectedWordsArr;
+    };
+
     var _checkNewCollection = function(){
         var nc = _.difference(_victorRef,_collectedWords);
         if(nc.length>0){
@@ -212,7 +232,13 @@ gameModule.Logic = (function(){
         }
         return false;
     };
-
+    var _collectSucceedWord = function(boxObj){
+        _victorRef.push(boxObj.ref);
+        _collectedWordsArr[boxObj.ref] = _selectedObj;
+        _totalCollected.push(boxObj.full);//总计收集的多少，游戏刷新时候不清楚，restart时候清除
+        _lastPos = [];
+        _setWordsCount();
+    };
     var checkLogic = {
         _checkBox : function(boxObj){
             if(!boxObj){
@@ -244,9 +270,11 @@ gameModule.Logic = (function(){
                 _selectedRef.push(boxObj.ref);
                 _selectedObj.push(boxObj);
                 if(boxObj.pos == boxObj.to){
-                    _victorRef.push(boxObj.ref);
-                    _collectedWordsArr[boxObj.ref] = _selectedObj;
-                    _lastPos = [];
+                    //_victorRef.push(boxObj.ref);
+                    //_collectedWordsArr[boxObj.ref] = _selectedObj;
+                    //_totalCollected.push(boxObj.full);//总计收集的多少，游戏刷新时候不清楚，restart时候清除
+                    //_lastPos = [];
+                    _collectSucceedWord(boxObj);
                     _resetArr();
                 }
                 return true;
@@ -282,9 +310,11 @@ gameModule.Logic = (function(){
                     return false
                 }
                 if(boxObj.pos == boxObj.to){
-                    _victorRef.push(boxObj.ref);
-                    _collectedWordsArr[boxObj.ref] = _selectedObj;
-                    _lastPos = [];
+                    //_victorRef.push(boxObj.ref);
+                    //_collectedWordsArr[boxObj.ref] = _selectedObj;
+                    //_totalCollected.push(boxObj.full);//总计收集的多少，游戏刷新时候不清楚，restart时候清除
+                    //_lastPos = [];
+                    _collectSucceedWord(boxObj);
                     _resetArr();
                 }
                 return true;
@@ -304,6 +334,48 @@ gameModule.Logic = (function(){
     var getLastSuccessWordsRef = function(){
         return _.last(_victorRef);
     };
+
+    var _correctCount = 0
+        ,_wrongCount = 0
+        ,_isPerfect = false
+        ,_totalScore = 0
+        ,_continueCount = 0;
+    var _clearCorrectCount = function(){
+        _correctCount = 0;
+        _wrongCount = 0;
+        _isPerfect = false;
+    };
+    //选择正确或者错误计数器
+    var _setWordsCount = function(){
+        _continueCount += 1;
+        if(_continueCount!=1){
+            _totalScore+=1000*(1+_continueCount/10);
+        }else{
+            _totalScore+=1000;
+        }
+    };
+    var _setCharCount = function(check){
+        if(check){
+            _correctCount+=1;
+            _totalScore += 100 *Math.pow(Math.E,(_correctCount/100 - 0.01));
+            if(_correctCount == gameModule.Data.getCorrectCharsNumber()){
+                _isPerfect = true;
+                _totalScore+=5000;
+            }
+        }else{
+            _correctCount = 0;
+            _wrongCount+=1;
+            _isPerfect = false;
+        }
+        console.log(_correctCount);
+    };
+    var _returnCount = function(){
+        return {
+            correct:_correctCount,
+            wrong:_wrongCount
+        }
+    };
+    //选择触发函数
     var _boxAction = function($box,callback){
         var _callBack = callback || {};
         var bid = $box.attr("data-boxid")
@@ -315,19 +387,25 @@ gameModule.Logic = (function(){
             return
         }
         isBox = checkLogic._checkBox1(boxObj);
+        //正确或者不正确判定
         if(isBox){
             $box.addClass(_selectedCss);
         }else{
             _clearClass();
         }
-
+        //记录选择器
+        _setCharCount(isBox);
+        //判定回调
         callback['stepfunc'](isBox);
+        //收集回调
         isNewCollected = _checkNewCollection();
         if(!!isNewCollected){
             if(typeof(callback['collected']) == 'function'){
                 callback['collected'](_collectedWordsArr[isNewCollected[0]]);
             }
         }
+        console.log(_totalScore);
+        //本局胜利判定
         isV = _checkVictor();
         if(isV){
             if(callback['victorfunc']){
@@ -337,20 +415,38 @@ gameModule.Logic = (function(){
     };
 
     //重玩
-    var _restart = function(){
-        gameModule.Layout.init();
+    var _restart = function(layoutConfig){
+        gameModule.Layout.init(layoutConfig);
         _resetAll();
-        _setData();
+        _loadData();
         _setVicCondition();
+        _clearCorrectCount();
+        _totalCollected = [];//与refresh的区别
     };
 
+    var _refreshMatrix = function(){
+        gameModule.Layout.init();
+        _resetAll();
+        _loadData();
+        _setVicCondition();
+        _clearCorrectCount();
+    };
+
+    my.getCollectedBox = function(){
+        return _collectedWordsArr;
+    };
+    my.getTotalCollectedBox = function(){
+        return _totalCollected;
+    };
     //传出box控制方法
     my.callBoxAction = function($box,callback){
         _boxAction($box,callback);
     };
-
-    my.init = function(){
-        _restart();
+    my.refresh = function(){
+      _refreshMatrix();
+    };
+    my.init = function(layoutConfig){
+        _restart(layoutConfig);
     };
     return my;
 }());

@@ -96,18 +96,27 @@
 				    <div class="col-xs-5 g-score">XXX分</div>
 				    <div class="col-xs-5 g-timeleft">xxx毫秒</div>
 			    </div>
-			    <div class="row">
-				    <div class="col-xs-10 g-timebar">
-					    <span class="g-barinner"></span>
-				    </div>
-			    </div>
 		    </div>
 	    </div>
 <!--	    游戏区-->
 	    <div class="col-sm-12 g-middle">
 		    <div class="row">
-			    <div class="col-sm-12 g-info" style="background-color: greenyellow">12321</div>
+			    <div class="col-xs-12 g-collectedBox">
+				    <div class="g-cwrap">
+					    <div class="g-cbox"></div>
+					    <div class="g-cbox"></div>
+					    <div class="g-cbox"></div>
+					    <div class="g-cbox"></div>
+				    </div>
+			    </div>
+		    </div>
+		    <div class="row">
 			    <div class="col-sm-12 g-area">
+				    <div class="row">
+					    <div class="col-xs-12 g-timebar">
+						    <span class="g-barinner"></span>
+					    </div>
+				    </div>
 				    <div class="g-wrap">
 
 				    </div>
@@ -188,12 +197,14 @@
 				tl.eventCallback("onComplete",function(){TweenMax.set($(".g-block"),{clearProps:"z-index"})});
 			});
 		});
+
 		gameModule.init({
 			col:6,
 			row:5,
 			margin:2,
 			debug:true
 		});
+
 		$g = $(".g-timeleft");
 		$bar = $('.g-barinner');
 		$m = $('.zh-overlay-mask');
@@ -226,6 +237,8 @@
 		$("#btn-refresh").click(function(){
 			sound1.play();
 			gameModule.refresh();
+			console.log(gameModule.Logic.getCollectedBox());
+			console.log(gameModule.Logic.getTotalCollectedBox());
 			tt.changeRuningSecond(-5);
 		});
 
@@ -252,6 +265,10 @@
 							var d = $('[data-boxid='+ v.pos+']');
 							var pos = d.offset();
 							var cl = d.clone();
+							var cbSize = {
+								width:d.width()/2,
+								height: d.width()/2
+							};
 							dw = d.width()/2.5;
 							boxl = boxl + dw;
 							cl.removeAttr("data-boxid")
@@ -259,12 +276,14 @@
 								.removeClass('g-blockSelected')
 								.addClass("g-collected");
 							$b.append(cl);
-							TweenMax.fromTo(cl,2,{"left":pos.left,"top":pos.top},{"top":boxt+"px","left":boxl+"px",delay:0,ease:Back.easeInOut},0.3,"+=2");
+							TweenMax.fromTo(cl,2
+								,{"left":pos.left,"top":pos.top}
+								,{"top":boxt+"px","left":boxl+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"1em",delay:0,ease:Back.easeInOut}
+								,0.3,"+=2");
 						});
 						boxt = boxt+dw;
 					},
 					victorfunc:function(c){
-						console.log(c);
 						gameOver();
 					}
 				});
@@ -273,9 +292,11 @@
 		},".g-block");
 
 		function gameOver(){
-			tt.stop(true);
+			tt.stop();
 			alert("game over");
-			gameModule.Logic.init();
+			console.log(gameModule.Logic.getCollectedBox());
+//			gameModule.Logic.init();
+			gameModule.refresh();
 			_startFlag = true;
 		}
 	});
