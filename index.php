@@ -295,7 +295,6 @@
 			tt.stop();
 			alert("game over");
 			console.log(gameModule.Logic.getCollectedBox());
-//			gameModule.Logic.init();
 			gameModule.refresh();
 			_startFlag = true;
 		}
