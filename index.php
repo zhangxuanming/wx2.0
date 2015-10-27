@@ -255,21 +255,21 @@
 				}
 				var $box = $(this);
 				var boxId = $box.attr("data-boxid");
-				var isBoxObject = gameModule.Logic.checkBox(boxId); //取得判定结果
-
-				if(!isBoxObject.isBox){
+				var isBoxCheckResult = gameModule.Logic.checkBoxOnClick(boxId); //取得判定结果
+				console.log(isBoxCheckResult);
+				if(!isBoxCheckResult.isBox){
 					tt.changeRuningSecond(-5);
-					_.each(isBoxObject.positionHistory,function(v,i){
+					_.each(isBoxCheckResult.positionHistory,function(v,i){
 						$('[data-boxid="'+v+'"]').removeClass(_selectedCss);
 					})
 				}else{
 					$box.addClass(_selectedCss);
 				}
 
-				if(isBoxObject.isNewCollected){
+				if(isBoxCheckResult.isNewCollected){
 					var $b = $('body');
 					var dw = 0;
-					_.each(isBoxObject.isNewCollected,function(v,i){
+					_.each(isBoxCheckResult.isNewCollected,function(v,i){
 						var d = $('[data-boxid='+ v.pos+']');
 						var pos = d.offset();
 						var cl = d.clone();
@@ -291,9 +291,11 @@
 					});
 					boxt = boxt+dw;
 				}
-				if(isBoxObject.isVictory){
+				if(isBoxCheckResult.isVictory){
 					gameOver();
+					console.log(gameModule.Logic.getTotalScore());
 				}
+				console.log(gameModule.Logic.getTotalScore());
 				sound2.play();
 			}
 		},".g-block");
