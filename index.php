@@ -237,8 +237,6 @@
 		$("#btn-refresh").click(function(){
 			sound1.play();
 			gameModule.refresh();
-			console.log(gameModule.Logic.getCollectedBox());
-			console.log(gameModule.Logic.getTotalCollectedBox());
 			tt.changeRuningSecond(-5);
 		});
 
@@ -261,7 +259,7 @@
 					tt.changeRuningSecond(-5);
 					_.each(isBoxCheckResult.positionHistory,function(v,i){
 						$('[data-boxid="'+v+'"]').removeClass(_selectedCss);
-					})
+					});
 				}else{
 					$box.addClass(_selectedCss);
 				}
@@ -293,18 +291,18 @@
 				}
 				if(isBoxCheckResult.isVictory){
 					gameOver();
-					console.log(gameModule.Logic.getTotalScore());
 				}
-				console.log(gameModule.Logic.getTotalScore());
 				sound2.play();
+				console.log(gameModule.Summary.get());
 			}
 		},".g-block");
 
 		function gameOver(){
 			tt.stop();
 			alert("game over");
-			console.log(gameModule.Logic.getCollectedBox());
 			gameModule.refresh();
+			var summary = gameModule.gameOver();
+			console.log(summary);
 			_startFlag = true;
 		}
 	});

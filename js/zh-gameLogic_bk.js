@@ -3,7 +3,6 @@
  */
 /*
  *  游戏逻辑模块
- *  每次刷新游戏，每一局
  */
 gameModule.Logic = (function(){
     const BONUSSCORE = 5000;
@@ -79,6 +78,13 @@ gameModule.Logic = (function(){
         _lastPos = [];
     };
 
+    var _restTotalCollected = function(){
+        _totalCollected = [];
+    };
+    var _getCollectionBox = function(){
+        return _collectedWordsArr;
+    };
+
     var _checkNewCollection = function(){
         var nc = _.difference(_victorRef,_collectedWords);
         if(nc.length>0){
@@ -93,14 +99,16 @@ gameModule.Logic = (function(){
         _collectedWordsArr[boxObj.ref] = _selectedObj;
         _totalCollected.push(boxObj.full);//总计收集的多少，游戏刷新时候不清，restart时候清除
         _lastPos = [];
-        console.log("collected");
         _setWordsCount();
     };
 
+    var levelUpdate = function(level){
+        _level++;
+    };
     //主判定逻辑
     var checkLogic = {
         //选择第二个文字时判定
-        _checkBoxA : function(boxObj){
+        _checkBox : function(boxObj){
             if(!boxObj){
                 return false
             }
@@ -137,7 +145,7 @@ gameModule.Logic = (function(){
             }
         },
         //即时判定
-        _checkBoxB : function(boxObj){
+        _checkBox1 : function(boxObj){
             if(!boxObj){
                 return false;
             }
@@ -156,6 +164,12 @@ gameModule.Logic = (function(){
                 return true;
             }
 
+            //上次选择结果为空，错误
+            if(lastObj.ref<0){
+                _resetArr();
+                return false;
+            }
+
             //当前选择有from，当前选择位置等于上个字指向位置，说明是最后一个字
             if (boxObj.from >= 0 && boxObj.pos == lastObj.to){
                 if(boxObj.index != _selectedObj.length-1){
@@ -163,7 +177,6 @@ gameModule.Logic = (function(){
                     return false
                 }
                 if(boxObj.pos == boxObj.to){
-                    console.log("收集了");
                     _collectSucceedWord(boxObj);
                     _resetArr();
                 }
@@ -173,6 +186,10 @@ gameModule.Logic = (function(){
                 return false;
             }
         }
+    };
+
+    var getLastSuccessWordsRef = function(){
+        return _.last(_victorRef);
     };
 
     //重置计数器
@@ -218,6 +235,55 @@ gameModule.Logic = (function(){
         }
     };
 
+    var _returnCount = function(){
+        return {
+            correct:_continueSucceedWordsCount,
+            wrong:_wrongCount
+        }
+    };
+
+    //每次选择触发函数,选择，收集，胜利（暂时废弃）
+    var _boxAction = function(bid,callback){
+        var _callBack = callback || {};
+        //var bid = $box.attr("data-boxid");
+        var boxObj = _data[bid]
+            ,isBox = false
+            ,isBoxObject = {}
+            ,isNewCollected = false
+            ,isV = false;
+        if(_.indexOf(_victorRef,boxObj.ref)>=0){
+            return
+        }
+
+        //正确或者不正确判定
+        isBox = checkLogic._checkBox1(boxObj);
+        isBoxObject = {
+            isBox:isBox,
+            positionHistory:_lastPos
+        };
+        //记录选择器
+        _setScoreOnClick(isBox);
+
+        //每次操作执行回调
+        callback['stepfunc'](isBoxObject);
+
+        //收集回调,查看是不是刚刚收集的
+        isNewCollected = _checkNewCollection();
+        if(!!isNewCollected){
+            if(typeof(callback['collected']) == 'function'){
+                callback['collected'](_collectedWordsArr[isNewCollected[0]]);
+            }
+        }
+
+        //本局胜利判定
+        isV = _checkVictor();
+        if(isV){
+            if(callback['victorfunc']){
+                callback['victorfunc'](_collectedWordsArr);
+            }
+        }
+    };
+
     //每次选择触发循环 函数,选择，收集，胜利
     var _boxCheck = function(bid){
         var boxObj = _data[bid]
@@ -238,8 +304,11 @@ gameModule.Logic = (function(){
             return
         }
 
+        _currentBox = _data[bid];
+        _posHistory = _lastPos;
+
         //正确或者不正确判定
-        isBox = checkLogic._checkBoxB(boxObj);
+        isBox = checkLogic._checkBox1(boxObj);
         _setCounterOnClick(isBox);//计数器设定
 
         //收集回调,查看是不是刚刚收集的
@@ -256,13 +325,11 @@ gameModule.Logic = (function(){
             _totalCollectedWords = _collectedWordsArr;
         }else{
             _isVictory = false;
-            //_totalCollectedWords = _collectedWordsArr;
+            _totalCollectedWords = _collectedWordsArr;
         }
 
         //设定每次选择积分记录
         _setScoreOnClick(isBox);
-        _currentBox = _data[bid];
-        _posHistory = _lastPos;
         isBoxObject = {
             currentBox:_currentBox,
             isBox:isBox,
@@ -271,8 +338,6 @@ gameModule.Logic = (function(){
             isVictory:_isVictory,
             totalCollectedWords:_totalCollectedWords
         };
-        gameModule.Summary.updateTotalClickCount();
-        gameModule.Summary.updateRoundClickNumber(isBox);
         return isBoxObject;
     };
 
@@ -287,13 +352,13 @@ gameModule.Logic = (function(){
     my.checkBoxOnClick = function(boxId){
         return _boxCheck(boxId);
     };
-    my.init = function(data,isNewGame){
-        _loadData(data);    //加载数据
-        _restartRound();    //重新开局
-        if(isNewGame){
-            //重置全部
-        }
-        gameModule.Summary.updateTotalRoundNumber();
+    my.getTotalScore = function(){
+        return _totalScore;
+    };
+    my.init = function(data){
+        //_restart(layoutConfig);
+        _loadData(data); //加载数据
+        _restartRound();
     };
     my.gameOver = function(){
         //重置所有计数器
@@ -303,68 +368,6 @@ gameModule.Logic = (function(){
     my.getGameSummary = function(){
         //去的游戏总结
     };
-    my.getTotalScore = function(){
-        return _totalScore;
-    };
     return my;
 }());
 
-
-//统计模块
-gameModule.Summary = (function(my){
-
-    var _summary = {};
-
-    var  _totalClickCount = 0
-        ,_totalCorrectClick = 0
-        ,_totalWrongClick = 0
-        ,_eachRoundClick = {} //每轮点击统计
-        ,_totalScore = 0 //总分
-        ,_totalRoundNumber = 0
-        ,_eachRoundScore = [] //每轮积分
-        ,_eachRoundTime = []; //每轮时间
-
-    my.updateTotalClickCount = function(){
-        _totalClickCount += 1;
-    };
-    my.updateTotalRoundNumber = function(){
-        _totalRoundNumber += 1;
-        _eachRoundClick[_totalRoundNumber] = _eachRoundClick[_totalRoundNumber] || {
-            correctClick : 0,
-            wrongClick   : 0
-        };
-    };
-    my.updateTotalCorrectClick = function(){
-        _totalCorrectClick += 1;
-        _eachRoundClick[_totalRoundNumber].correctClick += 1;
-    };
-    my.updateTotalWrongClick = function(){
-        _totalWrongClick += 1;
-        _eachRoundClick[_totalRoundNumber].wrongClick += 1;
-    };
-    my.updateRoundClickNumber = function(isBox){
-        if(isBox){
-            _totalCorrectClick += 1;
-            _eachRoundClick[_totalRoundNumber].correctClick += 1;
-        }else{
-            _totalWrongClick += 1;
-            _eachRoundClick[_totalRoundNumber].wrongClick += 1;
-        }
-    };
-
-
-    my.get = function(){
-        _summary =  {
-            TotalClickCount     : _totalClickCount,
-            TotalRoundNumber    : _totalRoundNumber,
-            TotalCorrectClick   : _totalCorrectClick,
-            TotalWrongClick     : _totalWrongClick,
-            EachRoundClick     : _eachRoundClick
-        };
-        return _summary;
-    };
-    my.reset = function(){
-        _summary = {};
-    };
-    return my;
-}(gameModule.Summary || {}));
