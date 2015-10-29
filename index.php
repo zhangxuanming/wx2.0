@@ -179,7 +179,6 @@
 
 <script>
 
-	//		tim(0);
 	$(document).ready(function(){
 		console.log(gameModule);
 		$(".pagesplash").click(function(){
@@ -241,12 +240,12 @@
 		});
 
 		var _startFlag = true;
-		var boxl = 10;
-		var boxt = 10
+		var boxLeft = 10;
+		var boxTop = 10
 			,_selectedCss = "g-blockSelected";
 		$(document).on({
 			click:function(e){
-				boxl = 10;
+				boxLeft = 10;
 				if(_startFlag){
 					tt.start();
 					_startFlag = false;
@@ -276,7 +275,7 @@
 							height: d.width()/2
 						};
 						dw = d.width()/2.5;
-						boxl = boxl + dw;
+						boxLeft = boxLeft + dw;
 						cl.removeAttr("data-boxid")
 							.removeClass("g-block")
 							.removeClass('g-blockSelected')
@@ -284,10 +283,10 @@
 						$b.append(cl);
 						TweenMax.fromTo(cl,2
 							,{"left":pos.left,"top":pos.top}
-							,{"top":boxt+"px","left":boxl+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"1em",delay:0,ease:Back.easeInOut}
+							,{"top":boxTop+"px","left":boxLeft+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"1em",delay:0,ease:Back.easeInOut}
 							,0.3,"+=2");
 					});
-					boxt = boxt+dw;
+					boxTop = boxTop+dw;
 				}
 				if(isBoxCheckResult.isVictory){
 					gameOver();

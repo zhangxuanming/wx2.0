@@ -17,8 +17,8 @@ gameModule.Logic = (function(){
         ,_level = 1; //正确单词数量
 
     //判定逻辑中需要用的每次选择时的信息
-    var _selectedPos = []       //每次选择的索引坐标计入数组
-        ,_selectedObj = []      //每次选择的Object记入数组
+    var _selectedHistoryPositionArray = []       //每次选择的索引坐标计入数组
+        ,_selectedHistoryObjectArray = []      //每次选择的Object记入数组
         ,_victorRef = []        //计数器数组，选对组词，则把相关ref推入数组
         ,_totalCollected = {}   //总共收集的
         ,_lastPos = [];         //保留本次check链用于清空css，记录以前每次的选择结果
@@ -62,23 +62,29 @@ gameModule.Logic = (function(){
 
     //从上一次正确选择到选择错误之间的选择序列
     var cachePositionHistory = function(){
-        _lastPos = _selectedPos;
+        _lastPos = _selectedHistoryPositionArray;
     };
-    //重置
-    var _resetArr = function(){
-        cachePositionHistory(); //记录上一次选择的结果
-        _selectedPos = [];
-        _selectedObj = [];
-    };
-
-    var _resetAll = function(){
-        _resetArr();
-        _victorRef = [];
-        _collectedWords=[];
-        _collectedWordsArr = {};
+    var _clearPositionHistoryCache = function(){
         _lastPos = [];
     };
 
+    //重置
+    var _resetArr = function(){
+        cachePositionHistory(); //记录上一次选择的结果
+        _selectedHistoryPositionArray = [];
+        _selectedHistoryObjectArray = [];
+    };
+
+    var _resetAll = function(){
+        _selectedHistoryPositionArray = [];
+        _selectedHistoryObjectArray = [];
+        _victorRef = [];
+        _collectedWords=[];
+        _collectedWordsArr = {};
+        _clearPositionHistoryCache();
+    };
+
+    //查看是否为可以收集的新词
     var _checkNewCollection = function(){
         var nc = _.difference(_victorRef,_collectedWords);
         if(nc.length>0){
@@ -90,7 +96,7 @@ gameModule.Logic = (function(){
 
     var _collectSucceedWord = function(boxObj){
         _victorRef.push(boxObj.ref);
-        _collectedWordsArr[boxObj.ref] = _selectedObj;
+        _collectedWordsArr[boxObj.ref] = _selectedHistoryObjectArray;
         _totalCollected.push(boxObj.full);//总计收集的多少，游戏刷新时候不清，restart时候清除
         _lastPos = [];
         console.log("collected");
@@ -104,27 +110,27 @@ gameModule.Logic = (function(){
             if(!boxObj){
                 return false
             }
-            var lastObj;
-            if(_selectedPos.length === 0){
-                _selectedPos.push(boxObj.pos);
-                _selectedObj.push(boxObj);
+            var lastSelectedObj;
+            if(_selectedHistoryPositionArray.length === 0){
+                _selectedHistoryPositionArray.push(boxObj.pos);
+                _selectedHistoryObjectArray.push(boxObj);
                 return true;
             }
-            lastObj = _.last(_selectedObj);
-            if(lastObj.index<0){
+            lastSelectedObj = _.last(_selectedHistoryObjectArray);
+            if(lastSelectedObj.index<0){
                 _resetArr();
                 return false;
             }
-            if (boxObj.from >=0 && boxObj.pos == lastObj.to){
-                if(boxObj.index != _selectedObj.length){
+            if (boxObj.from >=0 && boxObj.pos == lastSelectedObj.to){
+                if(boxObj.index != _selectedHistoryObjectArray.length){
                     _resetArr();
                     return false
                 }
-                _selectedPos.push(boxObj.pos);
-                _selectedObj.push(boxObj);
+                _selectedHistoryPositionArray.push(boxObj.pos);
+                _selectedHistoryObjectArray.push(boxObj);
                 if(boxObj.pos == boxObj.to){
                     //_victorRef.push(boxObj.ref);
-                    //_collectedWordsArr[boxObj.ref] = _selectedObj;
+                    //_collectedWordsArr[boxObj.ref] = _selectedHistoryObjectArray;
                     //_totalCollected.push(boxObj.full);//总计收集的多少，游戏刷新时候不清楚，restart时候清除
                     //_lastPos = [];
                     _collectSucceedWord(boxObj);
@@ -141,30 +147,34 @@ gameModule.Logic = (function(){
             if(!boxObj){
                 return false;
             }
-            var lastObj;
-            lastObj = _.last(_selectedObj); //上一次选择的结果数组
-            _selectedPos.push(boxObj.pos);
-            _selectedObj.push(boxObj);//记录本次选择的结果到数组
+
+            var lastSelectedObj;
+            lastSelectedObj = _.last(_selectedHistoryObjectArray); //上一次选择的结果数组
+            _selectedHistoryPositionArray.push(boxObj.pos);
+            _selectedHistoryObjectArray.push(boxObj);//记录本次选择的结果到数组
+
             //ref是-1，说明不是待选词 -> false
             //首次点击，但是index不是0，说明不是词语开头->false
-            if(boxObj.ref<0 || (_selectedPos.length === 1 && boxObj.index !== 0)){
+            if(boxObj.ref<0 || (_selectedHistoryPositionArray.length === 1 && boxObj.index !== 0)){
                 _resetArr();
                 return false;
             }
+
             //首次选择，是待选词 -> true
-            if(_selectedPos.length === 1 && boxObj.ref >= 0 && boxObj.index == 0){
+            if(_selectedHistoryPositionArray.length === 1 && boxObj.ref >= 0 && boxObj.index == 0){
                 return true;
             }
 
             //当前选择有from，当前选择位置等于上个字指向位置，说明是最后一个字
-            if (boxObj.from >= 0 && boxObj.pos == lastObj.to){
-                if(boxObj.index != _selectedObj.length-1){
+            if (boxObj.from >= 0 && boxObj.pos == lastSelectedObj.to){
+                if(boxObj.index != _selectedHistoryObjectArray.length-1){
                     _resetArr();
                     return false
                 }
+                //查看是否是最后一个词
                 if(boxObj.pos == boxObj.to){
                     console.log("收集了");
-                    _collectSucceedWord(boxObj);
+                    _collectSucceedWord(boxObj); //收集这个新到的词
                     _resetArr();
                 }
                 return true;
@@ -240,6 +250,10 @@ gameModule.Logic = (function(){
 
         //正确或者不正确判定
         isBox = checkLogic._checkBoxB(boxObj);
+        //是否可以进行收集
+        if(isBox){
+
+        }
         _setCounterOnClick(isBox);//计数器设定
 
         //收集回调,查看是不是刚刚收集的
@@ -254,13 +268,13 @@ gameModule.Logic = (function(){
         if(isV){
             _isVictory = true;
             _totalCollectedWords = _collectedWordsArr;
+            gameModule.Summary.updateVictoryRoundCount();
         }else{
             _isVictory = false;
-            //_totalCollectedWords = _collectedWordsArr;
         }
 
         //设定每次选择积分记录
-        _setScoreOnClick(isBox);
+        //_setScoreOnClick(isBox);
         _currentBox = _data[bid];
         _posHistory = _lastPos;
         isBoxObject = {
@@ -272,7 +286,7 @@ gameModule.Logic = (function(){
             totalCollectedWords:_totalCollectedWords
         };
         gameModule.Summary.updateTotalClickCount();
-        gameModule.Summary.updateRoundClickNumber(isBox);
+        gameModule.Summary.updateRoundClickCount(isBox);
         return isBoxObject;
     };
 
@@ -293,7 +307,7 @@ gameModule.Logic = (function(){
         if(isNewGame){
             //重置全部
         }
-        gameModule.Summary.updateTotalRoundNumber();
+        gameModule.Summary.updateTotalRoundCount();
     };
     my.gameOver = function(){
         //重置所有计数器
@@ -320,35 +334,33 @@ gameModule.Summary = (function(my){
         ,_totalWrongClick = 0
         ,_eachRoundClick = {} //每轮点击统计
         ,_totalScore = 0 //总分
-        ,_totalRoundNumber = 0
+        ,_totalRoundCount = 0
+        ,_activeRoundCount = 0
+        ,_victoryRoundCount = 0
         ,_eachRoundScore = [] //每轮积分
         ,_eachRoundTime = []; //每轮时间
 
     my.updateTotalClickCount = function(){
         _totalClickCount += 1;
     };
-    my.updateTotalRoundNumber = function(){
-        _totalRoundNumber += 1;
-        _eachRoundClick[_totalRoundNumber] = _eachRoundClick[_totalRoundNumber] || {
+    my.updateTotalRoundCount = function(){
+        _activeRoundCount = _totalRoundCount - _victoryRoundCount;
+        _totalRoundCount += 1;
+        _eachRoundClick[_totalRoundCount] = _eachRoundClick[_totalRoundCount] || {
             correctClick : 0,
             wrongClick   : 0
         };
     };
-    my.updateTotalCorrectClick = function(){
-        _totalCorrectClick += 1;
-        _eachRoundClick[_totalRoundNumber].correctClick += 1;
+    my.updateVictoryRoundCount = function(){
+        _victoryRoundCount += 1;
     };
-    my.updateTotalWrongClick = function(){
-        _totalWrongClick += 1;
-        _eachRoundClick[_totalRoundNumber].wrongClick += 1;
-    };
-    my.updateRoundClickNumber = function(isBox){
+    my.updateRoundClickCount = function(isBox){
         if(isBox){
             _totalCorrectClick += 1;
-            _eachRoundClick[_totalRoundNumber].correctClick += 1;
+            _eachRoundClick[_totalRoundCount].correctClick += 1;
         }else{
             _totalWrongClick += 1;
-            _eachRoundClick[_totalRoundNumber].wrongClick += 1;
+            _eachRoundClick[_totalRoundCount].wrongClick += 1;
         }
     };
 
@@ -356,7 +368,9 @@ gameModule.Summary = (function(my){
     my.get = function(){
         _summary =  {
             TotalClickCount     : _totalClickCount,
-            TotalRoundNumber    : _totalRoundNumber,
+            TotalRoundCount    : _totalRoundCount,
+            VictoryRoundCount : _victoryRoundCount,
+            ActiveRoundCount : _activeRoundCount,
             TotalCorrectClick   : _totalCorrectClick,
             TotalWrongClick     : _totalWrongClick,
             EachRoundClick     : _eachRoundClick
