@@ -13,30 +13,28 @@ gameModule.Logic = (function(){
     var _dataObject = null
         ,_data = null
         ,_victorCondition = 3
-        ,_totalChosenCharsCount = 12 //正确单词数量
-        ,_level = 1;
+        ,_totalChosenCharsCount = 12; //正确单词数量
 
-    //判定逻辑中需要用的每次选择时的信息
+    //贯穿游戏始终的计数器,整局结束后重置
+    var _continueSucceeClickCount = 0      //正确选对的次数
+        ,_continueSucceeCollectCount = 0  //记录连续选对的整个单词的次数
+        ,_totalScore = 0;                //总分
+
+    function clearGlobalCounter(){
+        _continueSucceeClickCount = 0;      //正确选对的次数
+        _continueSucceeCollectCount = 0;  //记录连续选对的整个单词的次数
+        _totalScore = 0;
+    }
+
+    //判定逻辑中需要用的每次选择时的信息,每局的持续信息
     var _selectedHistoryPositionList = []       //每次选择的索引坐标计入数组
         ,_selectedHistoryObjectList = []      //每次选择的Object记入数组
-        ,_victorRef = []        //计数器数组，选对组词，则把相关ref推入数组
+        ,_victorRef = []                    //计数器数组，选对组词，则把相关ref推入数组
         ,_positionHisotryList = []
         ,_objectHistoryList = [];         //保留本次check链用于清空css，记录以前每次的选择结果
 
-
-    //记录游戏开始到结束总共的信息
-    var _totalRoundClickCountArray = []
-        ,_eachRoundClickCount = 0
-        ,_eachRoundCollectedWords = []
-        ,_totalCollected = {}   //总共收集的
-        ,_eachRoundTime = 0; //每局游戏时间
-
-    var _continueSucceeClickCount = 0      //正确选对的次数
-        ,_continueSucceeCollectCount = 0  //记录连续选对的整个单词的次数
-        ,_wrongCount = 0                //错误选对的次数
-        ,_totalScore = 0                //总分
-        ,_isPerfect = false             //完美标记 - 应该没用
-        ,_collectedWordsRefList = []           //已经收集过的词Ref
+    //每局收集的词语
+    var _collectedWordsRefList = []           //已经收集过的词Ref
         ,_collectedCharList = {};       //收集过的obj
 
     //初始化设定数据
@@ -51,10 +49,7 @@ gameModule.Logic = (function(){
     //过关判定，词组数量相等则过关
     var _checkVictor = function(){
         if(_victorRef.length >= _victorCondition){
-            _level += 1; //每局胜利 +1 计数
-            //_totalRoundClickCountArray.push(_eachRoundClickCount); //记录每局结束选择步数
             _victorRef = [];
-            //_eachRoundClickCount = 0; //每局清零
             return true;
         }else{
             return false;
@@ -83,7 +78,6 @@ gameModule.Logic = (function(){
         _victorRef = [];
         _collectedWordsRefList=[];
         _collectedCharList = {};
-        //_eachRoundCollectedWords = [];
         _clearPositionHistoryCache();
     };
 
@@ -104,7 +98,6 @@ gameModule.Logic = (function(){
             //ref是-1，说明不是待选词 -> false
             //首次点击，但是index不是0，说明不是词语开头->false
             if(boxObj.ref<0 || (_selectedHistoryObjectList.length === 1 && boxObj.index !== 0)){
-                //_resetArr();
                 return false;
             }
 
@@ -125,8 +118,6 @@ gameModule.Logic = (function(){
     //重置计数器
     var _clearCorrectCount = function(){
         _continueSucceeClickCount = 0;
-        _wrongCount = 0;
-        _isPerfect = false;
     };
 
     var counter = {
@@ -155,13 +146,6 @@ gameModule.Logic = (function(){
                 return;
             }
             _totalScore += 100 * Math.pow(Math.E,(_continueSucceeClickCount/100 - 0.01)); //分数累加
-            console.log(_continueSucceeClickCount);
-            console.log(_totalScore);
-            //连续所有单词都正确通关奖金5000
-            if(_continueSucceeClickCount == _totalChosenCharsCount){
-                _isPerfect = true;
-                _totalScore += BONUSSCORE;
-            }
         },
         updateScoreForCollectWords:function(){
             if(_continueSucceeCollectCount != 1){
@@ -169,6 +153,10 @@ gameModule.Logic = (function(){
             }else{
                 _totalScore += 1000;
             }
+        },
+        updateScoreForPassRound:function(){
+            //通关奖励5000点
+            _totalScore += BONUSSCORE;
         }
     };
 
@@ -186,8 +174,6 @@ gameModule.Logic = (function(){
     //收集成功的词语
     var _collectSucceedWord = function(boxObj){
         _collectedCharList[boxObj.ref] = _objectHistoryList;
-        //_clearPositionHistoryCache();
-        //_resetArr();
         console.log("收集完毕");
     };
 
@@ -202,7 +188,6 @@ gameModule.Logic = (function(){
         var _currentBox
             ,_posHistory
             ,_isNewCollected
-            ,_totalCollectedWords
             ,_isVictory;
         if(_.indexOf(_victorRef,boxObj.ref)>=0){
             console.log("选过了");
@@ -253,14 +238,13 @@ gameModule.Logic = (function(){
         isV = _checkVictor();
         if(isV){
             _isVictory = true;
-            _totalCollectedWords = _collectedCharList;
+            scoreCalculator.updateScoreForPassRound();//过关奖励
             gameModule.Summary.updateVictoryRoundCount();
         }else{
             _isVictory = false;
         }
 
         //设定每次选择积分记录
-        //_setScoreOnClick(isBox);
         _currentBox = _data[bid];
         _posHistory = _positionHisotryList;
         isBoxObject = {
@@ -269,8 +253,8 @@ gameModule.Logic = (function(){
             positionHistory:_posHistory,
             isNewCollected:_isNewCollected,
             isVictory:_isVictory
-            //totalCollectedWords:_totalCollectedWords
         };
+
         gameModule.Summary.updateTotalClickCount();
         gameModule.Summary.updateRoundClickCount(isBox);
         gameModule.Summary.updateTotalScore(_totalScore);
@@ -282,10 +266,7 @@ gameModule.Logic = (function(){
 
     var _restartRound = function(){
         _resetAll();
-        //_clearCorrectCount();
-        //_totalCollected = [];//与refresh的区别
     };
-
 
     //每次点击文字调用判定，传入id，返回判定结果数组
     my.checkBoxOnClick = function(boxId){
@@ -305,12 +286,12 @@ gameModule.Logic = (function(){
         //返回游戏Summary
         return "gameOver 啦!";
     };
-    my.getGameSummary = function(){
-        //去的游戏总结
-    };
-    my.getTotalScore = function(){
-        return _totalScore;
-    };
+    //my.getGameSummary = function(){
+    //    //去的游戏总结
+    //};
+    //my.getTotalScore = function(){
+    //    return _totalScore;
+    //};
     return my;
 }());
 
