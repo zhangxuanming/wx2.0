@@ -254,6 +254,9 @@
 				var boxId = $box.attr("data-boxid");
 				var isBoxCheckResult = gameModule.Logic.checkBoxOnClick(boxId); //取得判定结果
 				console.log(isBoxCheckResult);
+				if(!isBoxCheckResult){
+					return;
+				}
 				if(!isBoxCheckResult.isBox){
 					tt.changeRuningSecond(-5);
 					_.each(isBoxCheckResult.positionHistory,function(v,i){
