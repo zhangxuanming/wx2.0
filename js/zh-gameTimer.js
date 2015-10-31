@@ -5,11 +5,15 @@
 var gameTimer = (function(my){
 
     var _n = 0;
-    var isStop = false;
+    var isStop = true;
     var instance = null;
     var _maxTime = -1;
     var _delay = 1000/24;
     var _callback = {};
+
+    my.isStopped = function(){
+        return isStop;
+    };
     my.getCount = function(){
         return _n;
     };
@@ -82,7 +86,6 @@ var gameTimer = (function(my){
     my.reset = function(n){
         isStop = true;
         _n = n || 0;
-        console.log(_n);
     };
     my.restart = function(){
         _n = 0;

@@ -9,6 +9,7 @@ var gameModule = (function(my){
         debug:false
     };
     var _data = {};
+    var _isGameOver = true;
     var startNewGame = function(layoutConfig){
         _data = gameModule.Data.getNewData();
         gameModule.Layout.init(layoutConfig,_data);
@@ -21,6 +22,9 @@ var gameModule = (function(my){
     };
 
     //暴露方法
+    my.isGameOver = function(){
+        return _isGameOver;
+    };
     my.getCurrentData = function(){
         return _data;
     };
@@ -32,12 +36,13 @@ var gameModule = (function(my){
     };
     my.gameOver = function(){
         console.log("游戏结束积分");
-        var _summary =  gameModule.Summary.get();
-        gameModule.Summary.reset();
-        return _summary;
+        _isGameOver = true;
+        return gameModule.Summary.get();
     };
     my.init = function(layoutConfig){
         _layoutConfig = layoutConfig ? layoutConfig : _layoutConfig;
+        _isGameOver = false;
+        gameModule.Summary.reset();
         startNewGame(layoutConfig);
     };
     return my;

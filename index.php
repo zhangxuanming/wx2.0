@@ -183,7 +183,7 @@
 <script>
 
 	$(document).ready(function(){
-		console.log(gameModule);
+		//游戏入场
 		$(".pagesplash").click(function(){
 			$(this).fadeOut(300,function(){
 				$(".landing").fadeIn(300);
@@ -200,6 +200,7 @@
 			});
 		});
 
+		//游戏初化设定
 		gameModule.init({
 			col:6,
 			row:5,
@@ -207,33 +208,39 @@
 			debug:true
 		});
 
+		//时间槽设定
 		$g = $(".g-timeleft");
 		$bar = $('.g-barinner');
 		$m = $('.zh-overlay-mask');
 		function getBarLegnth(){
 			return 100*(1 -  tt.getRunningSecond() / tt.getMaxtime());
 		}
+		//时间控制模块
 		var tt = gameTimer;
-		tt.setMaxtime(60);
+		tt.setMaxtime(60);//设定游戏时长
+		//设定update 调用
 		tt.updateCallback(function(n){
 			var bl = getBarLegnth();
 			$bar.css({"width":bl+"%"});
 			$g.html(parseFloat(60 - tt.getRunningSecond()).toFixed(3));
 		});
+		//设定时间结束后的调用
 		tt.endCallback(function(n){
+			gameOver();
+		});
+		function gameOver(){
 			var summary = gameModule.gameOver();
 			console.log(summary);
-//			gameModule.init();
-		});
+		}
+
+		//重新开始游戏
 		$('#btn-restart').click(function(){
 			var summary = gameModule.gameOver();
-			console.log(summary);
 			gameModule.init();
 			tt.reset();
-			_startFlag = true;
 		});
 
-		//倒计时
+		//声音模块设定
 		var sound1 = new Howl({
 			urls:["src/sound/kick.wav"],
 			volume:1,
@@ -244,22 +251,29 @@
 			volume:1,
 			buffer:true
 		});
+
+		//刷新每轮
 		$("#btn-refresh").click(function(){
+			if(gameModule.isGameOver()){
+				console.log("游戏已经结束啦");
+				return;
+			}
 			sound1.play();
 			gameModule.refresh();
 			tt.changeRuningSecond(-5);
 		});
 
-		var _startFlag = true;
 		var boxLeft = 10;
 		var boxTop = 10
 			,_selectedCss = "g-blockSelected";
 		$(document).on({
 			click:function(e){
+				if(gameModule.isGameOver()){
+					return;
+				}
 				boxLeft = 10;
-				if(_startFlag){
+				if(tt.isStopped()){
 					tt.start();
-					_startFlag = false;
 				}
 				var $box = $(this);
 				var boxId = $box.attr("data-boxid");
@@ -277,6 +291,7 @@
 					$box.addClass(_selectedCss);
 				}
 
+				console.log(isBoxCheckResult.isNewCollected);
 				if(isBoxCheckResult.isNewCollected){
 					var $b = $('body');
 					var dw = 0;
@@ -303,21 +318,12 @@
 					boxTop = boxTop+dw;
 				}
 				if(isBoxCheckResult.isVictory){
-					gameOver();
+					gameModule.refresh();
+					tt.stop();
 				}
 				sound2.play();
-//				console.log(gameModule.Summary.get());
 			}
 		},".g-block");
-
-		function gameOver(){
-			tt.stop();
-			alert("game over");
-			gameModule.refresh();
-			var summary = gameModule.gameOver();
-			console.log(summary);
-			_startFlag = true;
-		}
 	});
 </script>
 </body>
