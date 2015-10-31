@@ -9,12 +9,12 @@ var gameModule = (function(my){
         debug:false
     };
     var _data = {};
-    var startGame = function(layoutConfig){
+    var startNewGame = function(layoutConfig){
         _data = gameModule.Data.getNewData();
         gameModule.Layout.init(layoutConfig,_data);
-        gameModule.Logic.init(_data);
+        gameModule.Logic.init(_data,true);
     };
-    var nextQuest = function(layoutConfig){
+    var refreshQuest = function(layoutConfig){
         _data = gameModule.Data.getNewData();
         gameModule.Layout.init(layoutConfig,_data);
         gameModule.Logic.init(_data);
@@ -28,14 +28,17 @@ var gameModule = (function(my){
         return _layoutConfig;
     };
     my.refresh = function(){
-        nextQuest(_layoutConfig);
+        refreshQuest(_layoutConfig);
     };
     my.gameOver = function(){
-      return gameModule.Logic.gameOver();
+        console.log("游戏结束积分");
+        var _summary =  gameModule.Summary.get();
+        gameModule.Summary.reset();
+        return _summary;
     };
     my.init = function(layoutConfig){
         _layoutConfig = layoutConfig ? layoutConfig : _layoutConfig;
-        startGame(layoutConfig);
+        startNewGame(layoutConfig);
     };
     return my;
 }(gameModule || {}));

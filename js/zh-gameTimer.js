@@ -47,6 +47,7 @@ var gameTimer = (function(my){
     //主函数 递归调用
     var setTime = function(){
         if(!my.updateCallback){
+            console.log(_n);
             return;
         }
         if (_checkShouldEnd()){
@@ -72,17 +73,20 @@ var gameTimer = (function(my){
     my.start = function(){
         isStop = false;
         setTime();
-        //setTime1();
     };
     my.stop = function(reset){
         _n = reset ? 0 : _n;
         isStop = true;
         window.clearTimeout(instance);
     };
+    my.reset = function(n){
+        isStop = true;
+        _n = n || 0;
+        console.log(_n);
+    };
     my.restart = function(){
         _n = 0;
         isStop = false;
-        setTime();
     };
     return my;
 }(gameTimer || {}));

@@ -127,6 +127,9 @@
 	    <div class="col-sm-12 g-bottom">
 		    <div id="btn-refresh" class="btn zh-yellow btn-block">太难了，换一个</div>
 	    </div>
+	    <div class="col-sm-12 g-bottom">
+		    <div id="btn-restart" class="btn zh-yellow btn-block">重新开始</div>
+	    </div>
     </div>
 
     <!--结局页-->
@@ -210,7 +213,6 @@
 		function getBarLegnth(){
 			return 100*(1 -  tt.getRunningSecond() / tt.getMaxtime());
 		}
-
 		var tt = gameTimer;
 		tt.setMaxtime(60);
 		tt.updateCallback(function(n){
@@ -219,7 +221,16 @@
 			$g.html(parseFloat(60 - tt.getRunningSecond()).toFixed(3));
 		});
 		tt.endCallback(function(n){
-			gameOver();
+			var summary = gameModule.gameOver();
+			console.log(summary);
+//			gameModule.init();
+		});
+		$('#btn-restart').click(function(){
+			var summary = gameModule.gameOver();
+			console.log(summary);
+			gameModule.init();
+			tt.reset();
+			_startFlag = true;
 		});
 
 		//倒计时
@@ -295,7 +306,7 @@
 					gameOver();
 				}
 				sound2.play();
-				console.log(gameModule.Summary.get());
+//				console.log(gameModule.Summary.get());
 			}
 		},".g-block");
 
