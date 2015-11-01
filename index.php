@@ -208,7 +208,7 @@
 			col:6,
 			row:5,
 			margin:2,
-			debug:true
+			debug:false
 		});
 
 		//时间槽设定
