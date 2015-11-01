@@ -87,14 +87,19 @@
 		</div>
 	</div>
 <!--    游戏页-->
-    <div class="row game-wrap full zh-yellow">
+    <div class="row game-wrap full">
 <!--	    头部信息-->
 	    <div class="col-sm-12 g-top">
-		    <div class="col-sm-12 center-block" style="padding:0.3em;text-align: center;font-size: 1.2em;color: azure">视觉系颜值高</div>
+		    <div class="col-sm-12 center-block" style="padding:0.3em;text-align: center;font-size: 1.2em;color: azure">四目矩阵</div>
 		    <div class="g-top-container">
 			    <div class="row">
-				    <div class="col-xs-5 g-score">XXX分</div>
-				    <div class="col-xs-5 g-timeleft">xxx毫秒</div>
+				    <div class="col-xs-12">积分:<span class="g-score">0</span></div>
+			    </div>
+			    <div class="row">
+				    <div class="col-xs-12"><span>倒计时:</span><span class="g-timeleft">60</span></div>
+			    </div>
+			    <div class="row">
+				    <div class="col-xs-12"><span>正确率:</span><span class="g-correctRate"></span></div>
 			    </div>
 		    </div>
 	    </div>
@@ -150,7 +155,7 @@
 						<span class="zh-m-img" style="background: url(./src/img/logo1.jpg) center;background-size: cover"></span>
 					</div>
 					<div class="col-xs-12" style="margin-top: 1em">
-						<p class="zh-m-des" ">点击文字拾取宝物哟</p>
+						<p class="zh-m-des" ">点击文字拾取宝物哟 </p>
 					</div>
 				</div>
 				<button class="zh-btn zh-btn-yellow btn-block zh-m-btn" data-modal="close" data-txt="嗯，朕知道了">额。。这是啥</button>
@@ -258,6 +263,9 @@
 			}
 			sound1.play();
 			gameModule.refresh();
+			if(tt.isStopped()){
+				tt.start();
+			}
 			tt.changeRuningSecond(-5);
 		});
 
@@ -292,33 +300,38 @@
 				if(isBoxCheckResult.isNewCollected){
 					var $b = $('body');
 					var dw = 0;
-					_.each(isBoxCheckResult.isNewCollected,function(v,i){
-						var d = $('[data-boxid='+ v.pos+']');
-						var pos = d.offset();
-						var cl = d.clone();
-						var cbSize = {
-							width:d.width()/2,
-							height: d.width()/2
-						};
-						dw = d.width()/2.5;
-						boxLeft = boxLeft + dw;
-						cl.removeAttr("data-boxid")
-							.removeClass("g-block")
-							.removeClass('g-blockSelected')
-							.addClass("g-collected");
-						$b.append(cl);
-						TweenMax.fromTo(cl,2
-							,{"left":pos.left,"top":pos.top}
-							,{"top":boxTop+"px","left":boxLeft+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"1em",delay:0,ease:Back.easeInOut}
-							,0.3,"+=2");
-					});
-					boxTop = boxTop+dw;
+//					_.each(isBoxCheckResult.isNewCollected,function(v,i){
+//						var d = $('[data-boxid='+ v.pos+']');
+//						var pos = d.offset();
+//						var cl = d.clone();
+//						var cbSize = {
+//							width:d.width()/2,
+//							height: d.width()/2
+//						};
+//						dw = d.width()/2.5;
+//						boxLeft = boxLeft + dw;
+//						cl.removeAttr("data-boxid")
+//							.removeClass("g-block")
+//							.removeClass('g-blockSelected')
+//							.addClass("g-collected");
+//						$b.append(cl);
+//						TweenMax.fromTo(cl,2
+//							,{"left":pos.left,"top":pos.top}
+//							,{"top":boxTop+"px","left":boxLeft+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"1em",delay:0,ease:Back.easeInOut}
+//							,0.3,"+=2");
+//					});
+//					boxTop = boxTop+dw;
 				}
 				if(isBoxCheckResult.isVictory){
 					gameModule.refresh();
 					tt.stop();
 				}
 				sound2.play();
+
+				var _summary  = gameModule.Summary.get();
+				console.log(_summary);
+				$(".g-score").html(_summary.TotalScore);
+				$(".g-correctRate").html(((_summary.TotalCorrectClick/_summary.TotalClickCount)*100).toFixed(1) + "%")
 			}
 		},".g-block");
 	});
