@@ -273,8 +273,7 @@ gameModule.Logic = (function(){
     };
     my.init = function(data,isNewGame){
         _loadData(data);    //加载数据
-        //_restartRound();    //重新开局
-        _clearAllVariableForRestartRound();
+        _clearAllVariableForRestartRound(); //清除每局的信息
         if(isNewGame){
             //重置全部
             _clearGlobalCounter();
@@ -289,12 +288,6 @@ gameModule.Logic = (function(){
         //返回游戏Summary
         return "gameOver 啦!";
     };
-    //my.getGameSummary = function(){
-    //    //去的游戏总结
-    //};
-    //my.getTotalScore = function(){
-    //    return _totalScore;
-    //};
     return my;
 }());
 

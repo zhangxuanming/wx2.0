@@ -10,10 +10,12 @@ var gameModule = (function(my){
     };
     var _data = {};
     var _isGameOver = true;
-    var startNewGame = function(layoutConfig){
+
+
+    var startNewGame = function(layoutConfig,isNew){
         _data = gameModule.Data.getNewData();
         gameModule.Layout.init(layoutConfig,_data);
-        gameModule.Logic.init(_data,true);
+        gameModule.Logic.init(_data,isNew);
     };
     var refreshQuest = function(layoutConfig){
         _data = gameModule.Data.getNewData();
@@ -22,28 +24,34 @@ var gameModule = (function(my){
     };
 
     //暴露方法
-    my.isGameOver = function(){
-        return _isGameOver;
-    };
+
     my.getCurrentData = function(){
         return _data;
     };
     my.getConfig = function(){
         return _layoutConfig;
     };
-    my.refresh = function(){
-        refreshQuest(_layoutConfig);
-    };
+
+    //设定游戏结束
     my.gameOver = function(){
-        console.log("游戏结束积分");
         _isGameOver = true;
         return gameModule.Summary.get();
     };
+    //返回游戏状态
+    my.isGameOver = function(){
+        return _isGameOver;
+    };
+    //每轮刷新
+    my.refresh = function(){
+        //refreshQuest(_layoutConfig);
+        startNewGame(_layoutConfig,false);
+    };
+    //初始化新游戏
     my.init = function(layoutConfig){
         _layoutConfig = layoutConfig ? layoutConfig : _layoutConfig;
         _isGameOver = false;
         gameModule.Summary.reset();
-        startNewGame(layoutConfig);
+        startNewGame(layoutConfig,true);
     };
     return my;
 }(gameModule || {}));
@@ -331,11 +339,9 @@ gameModule.Data = (function(my){
                 });
             }
         }
-        console.log(_correctCharsNumber);
         return dataObj;
     };
     var _setData = function(){
-        //_currentData = _calculateData(_prepareWords(_wordsCount,_restWordsCount));
         _currentData = {
             data:_calculateData(_prepareWords(_wordsCount,_restWordsCount)),
             totalChosenCharCount:_correctCharsNumber,

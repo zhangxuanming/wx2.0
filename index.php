@@ -126,8 +126,6 @@
 <!--	    底部操作区-->
 	    <div class="col-sm-12 g-bottom">
 		    <div id="btn-refresh" class="btn zh-yellow btn-block">太难了，换一个</div>
-	    </div>
-	    <div class="col-sm-12 g-bottom">
 		    <div id="btn-restart" class="btn zh-yellow btn-block">重新开始</div>
 	    </div>
     </div>
@@ -268,6 +266,7 @@
 			,_selectedCss = "g-blockSelected";
 		$(document).on({
 			click:function(e){
+				//游戏结束后点击无用
 				if(gameModule.isGameOver()){
 					return;
 				}
@@ -278,7 +277,6 @@
 				var $box = $(this);
 				var boxId = $box.attr("data-boxid");
 				var isBoxCheckResult = gameModule.Logic.checkBoxOnClick(boxId); //取得判定结果
-				console.log(isBoxCheckResult);
 				if(!isBoxCheckResult){
 					return;
 				}
@@ -291,7 +289,6 @@
 					$box.addClass(_selectedCss);
 				}
 
-				console.log(isBoxCheckResult.isNewCollected);
 				if(isBoxCheckResult.isNewCollected){
 					var $b = $('body');
 					var dw = 0;
