@@ -90,9 +90,9 @@
     <div class="row game-wrap full">
 <!--	    头部信息-->
 	    <div class="col-sm-12 g-top">
+		    <div class="col-sm-12 center-block" style="padding:0.3em;text-align: center;font-size: 1.2em;color: azure">四目矩阵</div>
 		    <div class="g-top-container clearfix">
-			    <div class="col-sm-12 center-block" style="padding:0.3em;text-align: center;font-size: 1.2em;color: azure">四目矩阵</div>
-			    <div style="width: 50%;float:left;">
+			    <div style="width: 50%;height: 100%;float:left;">
 				    <div class="row">
 					    <div class="col-xs-12">积分:<span class="g-score">0</span></div>
 				    </div>
@@ -103,8 +103,8 @@
 					    <div class="col-xs-12"><span>正确率:</span><span class="g-correctRate"></span></div>
 				    </div>
 			    </div>
-			    <div class="clearfix" style="background-color: red;width: 50%;min-height: 50px;float: left;padding-bottom: 20px;">
-				    <div id="boxBag" style="position: relative">
+			    <div class="clearfix g-boxBagContainer">
+				    <div class="g-boxBag">
 				    </div>
 			    </div>
 
@@ -149,36 +149,42 @@
 
 </div>
 
-<!--遮罩层-->
+<!--卡片-->
+<!--<div class="g-cardWrap">-->
+<!--	<p>欣欣向荣</p>-->
+<!--</div>-->
+
 <div class="zh-overlay-mask zh-hidden" style=" overflow:  hidden;">
-	<div id="zh-modal-wrap">
-		<div id="zh-modal" class="zh-modal zh-item-modal">
-			<div class="zh-modal-top">
-				<div class="row">
-					<div class="col-xs-10">
-						<span class="zh-m-name">看法宝！</span>
+	<!--遮罩层-->
+	<div class="zh-overlay-mask zh-hidden" style=" overflow:  hidden;">
+		<div id="zh-modal-wrap">
+			<div id="zh-modal" class="zh-modal zh-item-modal">
+				<div class="zh-modal-top">
+					<div class="row">
+						<div class="col-xs-10">
+							<span class="zh-m-name">看法宝！</span>
+						</div>
+						<div class="col-xs-2">
+							<span class="zh-m-img" style="background: url(./src/img/logo1.jpg) center;background-size: cover"></span>
+						</div>
+						<div class="col-xs-12" style="margin-top: 1em">
+							<p class="zh-m-des" ">点击文字拾取宝物哟 </p>
+						</div>
 					</div>
-					<div class="col-xs-2">
-						<span class="zh-m-img" style="background: url(./src/img/logo1.jpg) center;background-size: cover"></span>
-					</div>
-					<div class="col-xs-12" style="margin-top: 1em">
-						<p class="zh-m-des" ">点击文字拾取宝物哟 </p>
-					</div>
-				</div>
-				<button class="zh-btn zh-btn-yellow btn-block zh-m-btn" data-modal="close" data-txt="嗯，朕知道了">额。。这是啥</button>
-			</div>
-		</div>
-		<div id="zh-modal-noty" class="zh-modal-noty">
-			<div class="row">
-				<div class="col-xs-12 zh-noty-title">
-					<p>君上威武！</p>
-				</div>
-				<div class="col-xs-12 zh-noty-content">
-					<p>获得: [<span>吃饭睡觉</span>] 剧情选项</p>
+					<button class="zh-btn zh-btn-yellow btn-block zh-m-btn" data-modal="close" data-txt="嗯，朕知道了">额。。这是啥</button>
 				</div>
 			</div>
+			<!--		<div id="zh-modal-noty" class="zh-modal-noty">-->
+			<!--			<div class="row">-->
+			<!--				<div class="col-xs-12 zh-noty-title">-->
+			<!--					<p>君上威武！</p>-->
+			<!--				</div>-->
+			<!--				<div class="col-xs-12 zh-noty-content">-->
+			<!--					<p>获得: [<span>吃饭睡觉</span>] 剧情选项</p>-->
+			<!--				</div>-->
+			<!--			</div>-->
+			<!--		</div>-->
 		</div>
-	</div>
 </div>
 
 <!--配置页面-->
@@ -279,8 +285,20 @@
 		var boxLeft = 10;
 		var boxTop = 2
 			,_selectedCss = "g-blockSelected";
+		var boxBagPosition = function(){
+			var $boxBag = $(".g-boxBag");
+			console.log($boxBag.offset());
+			return {
+				width:$boxBag.width(),
+				height:$boxBag.height(),
+				left:$boxBag.offset().left-20,
+				top:$boxBag.offset().top
+			}
+		};
+		//点击动作
 		$(document).on({
 			click:function(e){
+				boxBagPosition();
 				//游戏结束后点击无用
 				if(gameModule.isGameOver()){
 					return;
@@ -304,8 +322,8 @@
 				}
 
 				if(isBoxCheckResult.isNewCollected){
-//					var $b = $('body');
-					var $b = $('#boxBag');
+					var $b = $('body');
+//					var $b = $('#boxBag');
 					var dw = 0;
 					boxLeft = 0;
 					_.each(isBoxCheckResult.isNewCollected,function(v,i){
@@ -316,25 +334,63 @@
 							width:d.width()/3,
 							height: d.width()/3
 						};
+
+
 						dw = d.width()/2.5;
-//						dw = 2;
 						boxLeft = boxLeft + dw;
-						console.log(boxLeft);
-						cl.removeAttr("data-boxid")
-							.removeClass("g-block")
-							.removeClass('g-blockSelected')
-							.addClass("g-collected");
-						$b.append(cl);
-						TweenMax.fromTo(cl,2
-							,{"left":pos.left,"top":pos.top}
-							,{"top":boxTop+"px","left":boxLeft+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"0.6em","position":"absolute",delay:0,ease:Back.easeInOut}
-							,0.3,"+=2");
+//						cl.removeAttr("data-boxid")
+//							.removeClass("g-block")
+//							.removeClass('g-blockSelected')
+//							.addClass("g-collected");
+//						TweenMax.fromTo(cl,2
+//							,{"left":pos.left,"top":pos.top,"zIndex":10}
+//							,{"top":boxTop+"px","left":boxLeft+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"0.6em","position":"absolute",delay:0,ease:Back.easeInOut}
+//							,0.3,"+=2");
+//						$b.append(cl);
+
+
+//						$b.append(card);
+//						var tl = new TimelineMax();
+//						var h = bagSize.top - card.height()/3;
+//						var dTop = h + card.height()/1.8;
+//						console.log(bagSize);
+//						TweenMax.set(card,{alpha:0});
+//						tl.fromTo(card,0.7,{alpha:0,scale:0},{alpha:1,scale:1,'zIndex':'10',ease:Back.easeInOut})
+//							.to(card,0.7,{'left':bagSize.left,'top':h,onComplete:function(){
+//								$(card).appendTo('.g-boxBag');
+//							}},"+=0.7")
+//							.to(card,1,{'top':dTop,'boxShadow':'none'});
+
+
 					});
+					var bagSize = boxBagPosition();
+					var card = $('<div class="g-cardWrap"><p>'+isBoxCheckResult.collectedWord+'</p></div>');
+					$b.append(card);
+					var tl = new TimelineMax();
+					var h = bagSize.top - card.height()/3;
+					var dTop = h + card.height()/1.8;
+					var gTop = $(".g-top");
+					var gh = gTop.height();
+					var gw = gTop.width();
+					var mh = gh*0.8;
+					var mw = gw/3;
+					var ml = gw - gw/3 - 10;
+					var mt = '1em';
+					console.log(mt);
+					TweenMax.set(card,{alpha:0});
+//					tl.fromTo(card,0.7,{alpha:0,scale:0},{alpha:1,scale:1,'zIndex':'10',ease:Back.easeInOut})
+//						.to(card,0.7,{'left':bagSize.left,'top':h,onComplete:function(){
+//							$(card).appendTo('.g-top');
+//						}},"+=0.7")
+//						.to(card,1,{'top':dTop,'boxShadow':'none'});
+					tl.fromTo(card,0.5,{alpha:0,scale:0},{alpha:1,scale:1,'zIndex':'10',ease:Back.easeInOut})
+						.to(card,0.5,{'left':bagSize.left,'top':h},"+=0.2")
+						.to(card,0.5,{'top':mt,'left':ml,'height':mh,'width':mw,'boxShadow':'none'});
 					boxTop = boxTop+dw;
 				}
 				if(isBoxCheckResult.isVictory){
 					gameModule.refresh();
-//					tt.stop();
+					//tt.stop();
 				}
 				sound2.play();
 

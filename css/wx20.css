@@ -340,9 +340,14 @@ body, html {
     background-color: red; }
 
 .g-top .g-top-container {
-  position: relative;
   font-size: 1.1em;
-  color: #03A9F4; }
+  color: #03A9F4;
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  min-height: 50%;
+  left: 0;
+  padding: 0 10px 0 10px; }
   .g-top .g-top-container .g-score, .g-top .g-top-container .g-timeleft, .g-top .g-top-container .g-correctRate {
     font-size: 1em;
     color: #ffcc00;
@@ -353,6 +358,22 @@ body, html {
     top: 0;
     position: absolute;
     padding-left: 2px; }
+
+.g-boxBagContainer {
+  position: relative;
+  float: left;
+  background-color: red;
+  width: 50%;
+  min-height: 100%;
+  padding-bottom: 20px; }
+  .g-boxBagContainer .g-boxBag {
+    position: absolute;
+    background-color: yellowgreen;
+    height: 0.5em;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+    overflow: hidden; }
 
 .g-timebar {
   position: relative;
@@ -448,5 +469,25 @@ body, html {
     box-shadow: 10px 10px 1px 3px rgba(0, 0, 0, 0.5); }
   100% {
     -webkit-transform: scale(1); } }
+.g-cardWrap {
+  position: absolute;
+  background-color: #345;
+  height: 30%;
+  width: 40%;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  top: 30%;
+  box-shadow: 10px 10px 10px 4px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 10px 10px 10px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid #0bf;
+  padding: 1em;
+  text-align: center;
+  background: rgba(0, 100, 200, 0.8); }
+  .g-cardWrap p {
+    color: gold;
+    font-size: 1.5em;
+    letter-spacing: 0.1em; }
 
 /*# sourceMappingURL=wx20.css.map */

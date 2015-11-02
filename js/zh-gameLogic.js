@@ -251,6 +251,7 @@ gameModule.Logic = (function(){
             isBox:isBox,
             positionHistory:_posHistory,
             isNewCollected:_isNewCollected,
+            collectedWord : boxObj.full,
             isVictory:_isVictory
         };
 
