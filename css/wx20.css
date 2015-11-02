@@ -3,7 +3,8 @@ body, html {
   height: 100%;
   font-family: "Microsoft Yahei","Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color: #444;
-  overflow-x: hidden; }
+  overflow-x: hidden;
+  perspective: 3000px; }
 
 .container {
   max-width: 600px; }
@@ -479,15 +480,19 @@ body, html {
   right: 0;
   margin: 0 auto;
   top: 30%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   box-shadow: 10px 10px 10px 4px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 10px 10px 10px 4px rgba(0, 0, 0, 0.3);
   border: 1px solid #0bf;
   padding: 1em;
   text-align: center;
-  background: rgba(0, 100, 200, 0.8); }
+  background: rgba(0, 100, 200, 0.8);
+  border-radius: 3px;
+  -webkit-border-radius: 3px; }
   .g-cardWrap p {
     color: gold;
-    font-size: 1.5em;
+    font-size: 1.3em;
     letter-spacing: 0.1em; }
 
 /*# sourceMappingURL=wx20.css.map */

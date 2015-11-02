@@ -372,10 +372,13 @@
 					var gTop = $(".g-top");
 					var gh = gTop.height();
 					var gw = gTop.width();
-					var mh = gh*0.8;
+					var mh = gh*0.75;
 					var mw = gw/3;
 					var ml = gw - gw/3 - 10;
 					var mt = '1em';
+					var color = 'rgb('+_.random(255)+','+ _.random(255)+','+ _.random(255)+')';
+//					card.css({"background-color":color});
+					console.log(color);
 					console.log(mt);
 					TweenMax.set(card,{alpha:0});
 //					tl.fromTo(card,0.7,{alpha:0,scale:0},{alpha:1,scale:1,'zIndex':'10',ease:Back.easeInOut})
@@ -383,9 +386,11 @@
 //							$(card).appendTo('.g-top');
 //						}},"+=0.7")
 //						.to(card,1,{'top':dTop,'boxShadow':'none'});
+					var mox = ($(".g-cardWrap").size()-1) * -3;
+					var moy = 0; //($(".g-cardWrap").size()-1) * 3;
 					tl.fromTo(card,0.5,{alpha:0,scale:0},{alpha:1,scale:1,'zIndex':'10',ease:Back.easeInOut})
-						.to(card,0.5,{'left':bagSize.left,'top':h},"+=0.2")
-						.to(card,0.5,{'top':mt,'left':ml,'height':mh,'width':mw,'boxShadow':'none'});
+						.to(card,0.5,{'left':bagSize.left,'top':h,ease:Back.easeOut},"+=0.2")
+						.to(card,0.5,{'top':mt,'left':ml,'height':mh,'width':mw,'boxShadow':'none',rotationY:-80,x:mox,y:moy,ease:Back.easeInOut});
 					boxTop = boxTop+dw;
 				}
 				if(isBoxCheckResult.isVictory){
