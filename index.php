@@ -90,17 +90,24 @@
     <div class="row game-wrap full">
 <!--	    头部信息-->
 	    <div class="col-sm-12 g-top">
-		    <div class="col-sm-12 center-block" style="padding:0.3em;text-align: center;font-size: 1.2em;color: azure">四目矩阵</div>
-		    <div class="g-top-container">
-			    <div class="row">
-				    <div class="col-xs-12">积分:<span class="g-score">0</span></div>
+		    <div class="g-top-container clearfix">
+			    <div class="col-sm-12 center-block" style="padding:0.3em;text-align: center;font-size: 1.2em;color: azure">四目矩阵</div>
+			    <div style="width: 50%;float:left;">
+				    <div class="row">
+					    <div class="col-xs-12">积分:<span class="g-score">0</span></div>
+				    </div>
+				    <div class="row">
+					    <div class="col-xs-12"><span>倒计时:</span><span class="g-timeleft">60</span></div>
+				    </div>
+				    <div class="row">
+					    <div class="col-xs-12"><span>正确率:</span><span class="g-correctRate"></span></div>
+				    </div>
 			    </div>
-			    <div class="row">
-				    <div class="col-xs-12"><span>倒计时:</span><span class="g-timeleft">60</span></div>
+			    <div class="clearfix" style="background-color: red;width: 50%;min-height: 50px;float: left;padding-bottom: 20px;">
+				    <div id="boxBag" style="position: relative">
+				    </div>
 			    </div>
-			    <div class="row">
-				    <div class="col-xs-12"><span>正确率:</span><span class="g-correctRate"></span></div>
-			    </div>
+
 		    </div>
 	    </div>
 <!--	    游戏区-->
@@ -208,7 +215,7 @@
 			col:6,
 			row:5,
 			margin:2,
-			debug:false
+			debug:true
 		});
 
 		//时间槽设定
@@ -270,7 +277,7 @@
 		});
 
 		var boxLeft = 10;
-		var boxTop = 10
+		var boxTop = 2
 			,_selectedCss = "g-blockSelected";
 		$(document).on({
 			click:function(e){
@@ -278,7 +285,6 @@
 				if(gameModule.isGameOver()){
 					return;
 				}
-				boxLeft = 10;
 				if(tt.isStopped()){
 					tt.start();
 				}
@@ -298,33 +304,37 @@
 				}
 
 				if(isBoxCheckResult.isNewCollected){
-					var $b = $('body');
+//					var $b = $('body');
+					var $b = $('#boxBag');
 					var dw = 0;
-//					_.each(isBoxCheckResult.isNewCollected,function(v,i){
-//						var d = $('[data-boxid='+ v.pos+']');
-//						var pos = d.offset();
-//						var cl = d.clone();
-//						var cbSize = {
-//							width:d.width()/2,
-//							height: d.width()/2
-//						};
-//						dw = d.width()/2.5;
-//						boxLeft = boxLeft + dw;
-//						cl.removeAttr("data-boxid")
-//							.removeClass("g-block")
-//							.removeClass('g-blockSelected')
-//							.addClass("g-collected");
-//						$b.append(cl);
-//						TweenMax.fromTo(cl,2
-//							,{"left":pos.left,"top":pos.top}
-//							,{"top":boxTop+"px","left":boxLeft+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"1em",delay:0,ease:Back.easeInOut}
-//							,0.3,"+=2");
-//					});
-//					boxTop = boxTop+dw;
+					boxLeft = 0;
+					_.each(isBoxCheckResult.isNewCollected,function(v,i){
+						var d = $('[data-boxid='+ v.pos+']');
+						var pos = d.offset();
+						var cl = d.clone();
+						var cbSize = {
+							width:d.width()/3,
+							height: d.width()/3
+						};
+						dw = d.width()/2.5;
+//						dw = 2;
+						boxLeft = boxLeft + dw;
+						console.log(boxLeft);
+						cl.removeAttr("data-boxid")
+							.removeClass("g-block")
+							.removeClass('g-blockSelected')
+							.addClass("g-collected");
+						$b.append(cl);
+						TweenMax.fromTo(cl,2
+							,{"left":pos.left,"top":pos.top}
+							,{"top":boxTop+"px","left":boxLeft+"px","width":cbSize.width,"height":cbSize.height,"fontSize":"0.6em","position":"absolute",delay:0,ease:Back.easeInOut}
+							,0.3,"+=2");
+					});
+					boxTop = boxTop+dw;
 				}
 				if(isBoxCheckResult.isVictory){
 					gameModule.refresh();
-					tt.stop();
+//					tt.stop();
 				}
 				sound2.play();
 

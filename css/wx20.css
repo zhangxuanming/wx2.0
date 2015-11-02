@@ -341,7 +341,7 @@ body, html {
 
 .g-top .g-top-container {
   position: relative;
-  font-size: 1.5em;
+  font-size: 1.1em;
   color: #03A9F4; }
   .g-top .g-top-container .g-score, .g-top .g-top-container .g-timeleft, .g-top .g-top-container .g-correctRate {
     font-size: 1em;
