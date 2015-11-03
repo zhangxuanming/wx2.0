@@ -308,6 +308,7 @@ gameModule.Summary = (function(my){
         ,_victoryRoundCount = 0
         ,_eachRoundScore = {} //每轮积分
         ,_totalCollectedWords = []
+        ,_starts = 0
         ,_eachRoundTime = []; //每轮时间
     my.reset = function(){
         _summary = {};
@@ -340,6 +341,17 @@ gameModule.Summary = (function(my){
             score : 0,
             totalScore : 0
         };
+    };
+    var calculateStarts = function(victoryRoundCount){
+        var c = 0;
+        var ns = _starts+1; //next start
+        for(var i = 1;i<=ns;i++){
+            c = c + i;
+        }
+        if(victoryRoundCount == c){
+            _starts += 1;
+        }
+        return _starts;
     };
     //记录胜利局数
     my.updateVictoryRoundCount = function(){
@@ -374,12 +386,12 @@ gameModule.Summary = (function(my){
 
     };
 
-
     my.get = function(){
         _summary =  {
             TotalClickCount     : _totalClickCount,
             TotalRoundCount    : _totalRoundCount,
             VictoryRoundCount : _victoryRoundCount,
+            Starts : calculateStarts(_victoryRoundCount),
             ActiveRoundCount : _activeRoundCount,
             TotalCorrectClick   : _totalCorrectClick,
             TotalWrongClick     : _totalWrongClick,
