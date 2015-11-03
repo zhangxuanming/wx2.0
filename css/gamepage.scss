@@ -164,10 +164,21 @@
   -webkit-box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.5);
   transform: scale(0.9) !important;
   -webkit-transform: scale(0.9) !important;
-  animation: selected 0.5s ease-in 0.2s;
-  -webkit-animation: selected 0.5s ease-in 0.2s;
+//  animation: selected 0.5s ease-in 0.2s;
+//  -webkit-animation: selected 0.5s ease-in 0.2s;
   z-index: 1;
+  &::before{
+    content:"";
+    position: absolute;
+//    background-color: red;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+//    border: 1px solid red;
+  }
 }
+
 $posdeg:5deg;
 $negdeg:-5deg;
 $s:5%;
@@ -190,6 +201,12 @@ $a:-5;
       transform: scale(1) rotateZ($posdeg);
     }
   }
+  30%{-webkit-transform: scale(1) rotateY(0deg);}
+  0%{-webkit-transform: scale(1) rotateY(0deg)}
+  50%{-webkit-transform: scale(1.4) rotateY(180deg);box-shadow: 10px 10px 1px 3px rgba(0,0,0,0.5)}
+  100%{-webkit-transform: scale(0.9) rotateY(360deg)}
+}
+@-webkit-keyframes selected1 {
   30%{-webkit-transform: scale(1) rotateY(0deg);}
   0%{-webkit-transform: scale(1) rotateY(0deg)}
   50%{-webkit-transform: scale(1.4) rotateY(180deg);box-shadow: 10px 10px 1px 3px rgba(0,0,0,0.5)}
@@ -219,7 +236,6 @@ $a:-5;
   right: 0;
   margin: 0 auto;
   top: 30%;
-
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
   box-shadow: 10px 10px 10px 4px rgba(0,0,0,0.3);
