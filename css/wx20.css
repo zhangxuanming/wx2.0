@@ -363,13 +363,11 @@ body, html {
 .g-boxBagContainer {
   position: relative;
   float: left;
-  background-color: red;
   width: 50%;
   min-height: 100%;
   padding-bottom: 20px; }
   .g-boxBagContainer .g-boxBag {
     position: absolute;
-    background-color: yellowgreen;
     height: 0.5em;
     bottom: 0;
     z-index: 1;
@@ -474,7 +472,8 @@ body, html {
   position: absolute;
   background-color: #345;
   height: 30%;
-  width: 40%;
+  width: 3em;
+  padding: 0.5em;
   z-index: 10;
   left: 0;
   right: 0;
@@ -485,7 +484,6 @@ body, html {
   box-shadow: 10px 10px 10px 4px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 10px 10px 10px 4px rgba(0, 0, 0, 0.3);
   border: 1px solid #0bf;
-  padding: 1em;
   text-align: center;
   background: rgba(0, 100, 200, 0.8);
   border-radius: 3px;
@@ -493,6 +491,8 @@ body, html {
   .g-cardWrap p {
     color: gold;
     font-size: 1.3em;
-    letter-spacing: 0.1em; }
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 1em; }
 
 /*# sourceMappingURL=wx20.css.map */
