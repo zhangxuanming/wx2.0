@@ -186,7 +186,7 @@
 			<!--		</div>-->
 		</div>
 </div>
-
+<script type='application/javascript' src='js/fastclick.js'></script>
 <!--配置页面-->
 <script src="js/zh-gameLayout.js"></script>
 <script src="js/zh-gameTimer.js"></script>
@@ -197,6 +197,12 @@
 <!--<script src="js/hammer/hammer.js"></script>-->
 
 <script>
+
+	if ('addEventListener' in document) {
+		document.addEventListener('DOMContentLoaded', function() {
+			FastClick.attach(document.body);
+		}, false);
+	}
 
 	$(document).ready(function(){
 		//游戏入场
