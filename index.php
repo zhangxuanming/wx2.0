@@ -203,7 +203,7 @@
 			FastClick.attach(document.body);
 		}, false);
 	}
-
+console.log(navigator);
 	$(document).ready(function(){
 		//游戏入场
 		$(".pagesplash").click(function(){

@@ -416,10 +416,36 @@ body, html {
   .g-blockSelected::before {
     content: "";
     position: absolute;
+    width: 80%;
+    height: 80%;
+    left: 0;
+    top: 0;
+    border-left: 2px solid rgba(0, 0, 0, 0.5);
+    border-right: 2px solid lime;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    margin: 10%;
+    animation: selected1 2s linear infinite;
+    -webkit-animation: selected1 2s linear infinite;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    z-index: 1; }
+  .g-blockSelected::after {
+    content: "";
+    position: absolute;
     width: 100%;
     height: 100%;
     left: 0;
-    top: 0; }
+    top: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 3px solid #ffff00;
+    border-bottom: 3px solid #ffff00;
+    animation: selected2 10s linear infinite;
+    -webkit-animation: selected2 10s linear infinite;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    z-index: -1; }
 
 @keyframes selected {
   5% {
@@ -457,16 +483,26 @@ body, html {
     box-shadow: 10px 10px 1px 3px rgba(0, 0, 0, 0.5); }
   100% {
     -webkit-transform: scale(0.9) rotateY(360deg); } }
-@-webkit-keyframes selected1 {
-  30% {
-    -webkit-transform: scale(1) rotateY(0deg); }
+@keyframes selected1 {
   0% {
-    -webkit-transform: scale(1) rotateY(0deg); }
-  50% {
-    -webkit-transform: scale(1.4) rotateY(180deg);
-    box-shadow: 10px 10px 1px 3px rgba(0, 0, 0, 0.5); }
+    transform: scale(1) rotateZ(0deg); }
   100% {
-    -webkit-transform: scale(0.9) rotateY(360deg); } }
+    transform: scale(1) rotateZ(360deg); } }
+@-webkit-keyframes selected1 {
+  0% {
+    -webkit-transform: scale(1) rotateZ(0deg); }
+  100% {
+    -webkit-transform: scale(1) rotateZ(360deg); } }
+@keyframes selected2 {
+  0% {
+    transform: scale(1) rotateZ(360deg); }
+  100% {
+    transform: scale(1) rotateZ(-360deg); } }
+@-webkit-keyframes selected2 {
+  0% {
+    -webkit-transform: scale(1) rotateZ(360deg); }
+  100% {
+    -webkit-transform: scale(1) rotateZ(-360deg); } }
 @keyframes collected {
   0% {
     transform: scale(1); }
