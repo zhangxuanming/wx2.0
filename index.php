@@ -395,10 +395,10 @@
 //						.to(card,1,{'top':dTop,'boxShadow':'none'});
 					var mox = ($(".g-cardWrap").size()-1) * -(card.width()/2);//15;
 					var moy = 0; //($(".g-cardWrap").size()-1) * 3;
-					tl.fromTo(card,0.5,{alpha:0,scale:0},{alpha:1,scale:1,'zIndex':'10',ease:Back.easeInOut})
+					tl.fromTo(card,0.5,{alpha:0,scale:0},{alpha:1,scale:1,'zIndex':'1',ease:Back.easeInOut})
 						.to(card,0.5,{'left':bagSize.left,'top':h,ease:Back.easeOut},"+=0.2")
 						.to(card,0.5,{'top':mt,'left':ml,'height':mh,'boxShadow':'none',rotationY:0,x:mox,y:moy,ease:Back.easeInOut},"+=0.1")
-						.to(card,2,{alpha:2,rotationY:360,"margin":0,ease:Back.easeInOut});
+						.to(card,2,{alpha:2,rotationY:360,"margin":0,'zIndex':'1',ease:Back.easeInOut});
 //						.to(card,0.5,{'top':mt,'left':ml,'height':mh,'width':mw,'boxShadow':'none',rotationY:-80,x:mox,y:moy,ease:Back.easeInOut});
 					boxTop = boxTop+dw;
 				}
