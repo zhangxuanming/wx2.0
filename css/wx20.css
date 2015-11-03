@@ -437,10 +437,10 @@ body, html {
     height: 100%;
     left: 0;
     top: 0;
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
-    border-top: 3px solid #ffff00;
-    border-bottom: 3px solid #ffff00;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-top: 1px solid #ffff00;
+    border-bottom: 1px solid #ffff00;
     animation: selected2 10s linear infinite;
     -webkit-animation: selected2 10s linear infinite;
     border-radius: 50%;
